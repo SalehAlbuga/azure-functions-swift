@@ -1,6 +1,6 @@
 # Azure Functions for Swift ⚡️
 
-[license-url]: https://github.com/peterhuene/azure-functions-rs/blob/master/LICENSE
+[license-url]: https://github.com/salehalbuga/azure-functions-swift/blob/master/LICENSE
 
 [![license-status]][license-url]
 
