@@ -7,9 +7,7 @@
 
 import Foundation
 
-public final class Timer : Binding {
-    
-  
+public final class TimerTrigger : Binding {
     
     public var name: String = ""
     
@@ -20,15 +18,20 @@ public final class Timer : Binding {
     
     var userInfo: [String:Any] = [:]
     
-    init () {
+    internal init () {
         
     }
     
-    public static func initTrigger (name: String, schedule: String) -> Timer {
-        let timer = Timer()
-        timer.schedule = schedule
-        timer.name = name
-        return timer
+    public init(name: String, schedule: String) {
+        self.schedule = schedule
+        self.name = name
+    }
+    
+    public init(name: String, schedule: String, runOnStartup: Bool, useMonitor: Bool) {
+        self.schedule = schedule
+        self.name = name
+        self.runOnStartup = runOnStartup
+        self.useMonitor = useMonitor
     }
     
     struct Keys {
@@ -39,7 +42,7 @@ public final class Timer : Binding {
     
 }
 
-extension Timer: BindingCapability {
+extension TimerTrigger: BindingCapability {
     
     
     var isInput: Bool {
@@ -61,7 +64,7 @@ extension Timer: BindingCapability {
     func jsonDescription(direction: BindingDirection) throws -> [String: Any] {
         
         var props: [String: Any] = [
-            Definitions.Bindings.Keys.TypeKey: Timer.triggerTypeKey,
+            Definitions.Bindings.Keys.TypeKey: TimerTrigger.triggerTypeKey,
             Definitions.Bindings.Keys.Name: name,
             Definitions.Bindings.Keys.Direction: Definitions.Bindings.DirectionIn,
             Keys.Schedule: schedule

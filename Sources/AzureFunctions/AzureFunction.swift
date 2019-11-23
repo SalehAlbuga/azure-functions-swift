@@ -38,7 +38,7 @@ open class Function {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
-    open func exec(timer: Timer, context: inout Context, callback: @escaping callback) throws {
+    open func exec(timer: TimerTrigger, context: inout Context, callback: @escaping callback) throws {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     

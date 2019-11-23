@@ -21,7 +21,7 @@ internal class Broker {
             case let http as HttpRequest:
                 try function.exec(request: http, context: &context, callback: callback)
                 break
-            case let timer as Timer:
+            case let timer as TimerTrigger:
                 try function.exec(timer: timer, context: &context, callback: callback)
                 break
             case let blob as Blob:

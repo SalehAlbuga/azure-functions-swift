@@ -21,10 +21,10 @@ internal final class BindingFactory {
             } else {
                 throw FunctionError.internalInconsistancyException("Expected http binding type, got \(rpcBinding.type). Please make sure function.json matches the function definition.")
             }
-        case let timer as Timer:
-            if rpcBinding.type == Timer.triggerTypeKey {
+        case let timer as TimerTrigger:
+            if rpcBinding.type == TimerTrigger.triggerTypeKey {
                 let json = try RpcConverter.fromTypedData(data: binding.data) as! [String:Any]
-                let t = Timer()
+                let t = TimerTrigger()
                 t.userInfo = json
                 t.name = timer.name
                 t.schedule = timer.schedule
