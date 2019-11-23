@@ -11,7 +11,7 @@ internal final class RpcConverter {
     
     static func toRpcTypedData(obj: Any) -> AzureFunctionsRpcMessages_TypedData {
         var td = AzureFunctionsRpcMessages_TypedData()
-//        Logger.log(message: obj)
+        //        Logger.log(message: obj)
         switch obj {
         case let string as String:
             if string.starts(with: "{") || string.starts(with: "[") { // TODO detect JSON in str
@@ -72,15 +72,15 @@ internal final class RpcConverter {
             converted = httpReq
             break
         case let .some(.json(jsonStr)):
-             Logger.log("TD JSON \(jsonStr)")
+            Logger.log("TD JSON \(jsonStr)")
             if let data = jsonStr.data(using: .utf8) {
                 do {
-                   converted = try JSONSerialization.jsonObject(with: data, options: [])
-//                    if jsonStr.starts(with: "[") {
-//                        converted = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
-//                    } else {
-//                        converted = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-//                    }
+                    converted = try JSONSerialization.jsonObject(with: data, options: [])
+                    //                    if jsonStr.starts(with: "[") {
+                    //                        converted = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
+                    //                    } else {
+                    //                        converted = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                    //                    }
                 } catch {
                     Logger.log(error.localizedDescription)  // throw exception
                     throw FunctionError.JSONSerializationException(error.localizedDescription)
@@ -125,5 +125,26 @@ internal final class RpcConverter {
         return converted
     }
     
+    
+    static func fromBodyTypedData(data: AzureFunctionsRpcMessages_TypedData) -> Data?  {
+        var converted: Data? = nil
+        
+        switch data.data {
+        case let .some(.stream(data)):
+            converted = data
+            break
+        case let .some(.bytes(data)):
+            converted = data
+            break
+        case let .some(.json(str)), let .some(.string(str)):
+            if let data = str.data(using: .utf8) {
+                converted = data
+                break
+            }
+        default:
+            break
+        }
+        return converted
+    }
     
 }

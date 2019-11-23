@@ -37,17 +37,14 @@ public final class HttpRequest : Binding {
     
     
     internal init(fromRpcHttp: AzureFunctionsRpcMessages_RpcHttp) {
-        
         self.method = fromRpcHttp.method
         self.url = fromRpcHttp.url
         self.headers = fromRpcHttp.headers
         self.query = fromRpcHttp.query
         
-        let data = fromRpcHttp.body.bytes
-        self.body = data
-        
-        let rawData = fromRpcHttp.rawBody.bytes
-        self.rawBody = rawData
+        self.body = RpcConverter.fromBodyTypedData(data: fromRpcHttp.body)
+        self.rawBody = RpcConverter.fromBodyTypedData(data: fromRpcHttp.rawBody)
+
     }
     
     struct Keys {

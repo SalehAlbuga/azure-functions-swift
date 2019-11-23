@@ -14,15 +14,16 @@ public final class HttpResponse: Binding {
     
     public init () {
         self.name = ""
+        self.headers["X-Powered-By"] = "SwiftFunc"
     }
     
-    public init(name: String) {
-        self.name = name
+    public init(bindingName: String) {
+        self.name = bindingName
     }
     
     func toRpcHttp() -> AzureFunctionsRpcMessages_RpcHttp {
         var rpc = AzureFunctionsRpcMessages_RpcHttp()
-        rpc.statusCode = "\(statusCode ?? 500)"
+        rpc.statusCode = "\(statusCode ?? 200)"
         rpc.headers = self.headers
         
         if let data = body {
