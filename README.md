@@ -1,12 +1,12 @@
 # Azure Functions for Swift ⚡️
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 
 Implementation of [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
 in [Swift](https://swift.org).
 
 > **Disclaimer**  
-> This project is not an official Azure project or product.
+> This project is not an official Azure project.
 >
 > _Microsoft and Azure are registered trademarks of Microsoft Corporation._
 
