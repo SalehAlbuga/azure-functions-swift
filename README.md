@@ -69,8 +69,7 @@ Install the latest [Azure Functions Core Tools](https://docs.microsoft.com/en-us
 Just like Core Tools, Swift Functions Tools make functions development easier and helps in initializing the project and running the Functions locally.
 
 ```bash
-$ brew tap salehalbuga/formulae
-$ brew install swift-func
+$ brew install salehalbuga/formulae/swift-func
 ```
 
 This installs a CLI tool called `swiftfunc` that can be used to create and run Swift Azure Functions projects.
