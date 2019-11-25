@@ -52,13 +52,13 @@ class HttpFunction: Function {
 #### macOS 10.13 or later
 Currently the Swift Functions Tools are only supported on macOS. *(although, you can develop Swift Azure Functions on Linux but running them locally requires a lot of manual work).*
 
-#### Xcode 11/Swift 5 or later
+#### Swift 5/Xcode 11 or later
 
 #### .NET Core SDK
 
 .NET Core is required to for Azure Functions Host binding extensions like Blob, etc.
 
-Download .Net Core from [here](https://dotnet.microsoft.com/download/dotnet-core/2.2)
+You can download .Net Core SDK from [here](https://dotnet.microsoft.com/download/dotnet-core/2.2)
 
 #### Azure Functions Core Tools
 
@@ -66,15 +66,17 @@ Install the latest [Azure Functions Core Tools](https://docs.microsoft.com/en-us
 
 #### Swift Functions Tools
 
-Just like Core Tools, Swift Functions Tools make functions development easier and helps in initializing the project and running the Functions locally.
+Just like Core Tools, Swift Functions Tools make functions development easier and helps in initializing the project and running the Functions locally. 
 
+You can install it from Homebrew 🍺
 ```bash
-$ brew install salehalbuga/formulae/swift-func
+brew install salehalbuga/formulae/swift-func
 ```
 
-This installs a CLI tool called `swiftfunc` that can be used to create and run Swift Azure Functions projects.
+It installs a CLI tool called `swiftfunc` that can be used to create, projects, functions and run Swift Azure Functions projects.
 
-## Creating a new Azure Functions app
+## Developing Azure Functions in Swift
+## Creating a new Project/Azure Functions app
 
 Run `swiftfunc init myApp` command to create a new Azure Functions application:
 
@@ -85,12 +87,12 @@ swiftfunc init myApp
 It will create a new app in a new folder, and a folder named `functions` inside the Sources target where Functions should be (*/myApp/Sources/myApp/functions*).
 The project created is a Swift package project with the Azure Functions framework dependency.
 
-After that you can generate an Xcode project using SwiftPM for easier development.
+Optionally, you can generate an Xcode project using SwiftPM for easier development.
 ```bash
 swift package generate-xcodeproj
 ```
 
-## Creating a sample HTTP function
+## Creating a simple HTTP function
 
 Inside the new directory of your project, run `swiftfunc new http --name hello` command to create a new HTTP Function named `hello`:
 
@@ -98,14 +100,14 @@ Inside the new directory of your project, run `swiftfunc new http --name hello` 
 swiftfunc new http --name hello
 ```
 
-The new function file will be created inside `Sources/myApp/functions/hello.swift`.
+The new function file will be created in the following path `Sources/myApp/functions/hello.swift`.
 
 ## Running the new Functions App
 Run `swiftfunc run` in the project directory to run your Swift Functions project locally. It will compile the code and start the host for you *(as if you were running `func host start`)*. The host output should show you the URL of `hello` function created above. Click on it to run the function and see output!
 
 ## Deploying to Azure 
 
-Curently Swift Functions Tools do not provide commad to deploy to Azure. To deploy the Function App to Azure, you'll need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
+Curently Swift Functions Tools do not provide a commad to deploy to Azure. To deploy the Function App to Azure, you'll need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
 To build the image:
 ```bash
 docker build -t <imageTag> .
@@ -194,5 +196,10 @@ When your Function is done executing the logic you should call the provided call
 callback(res)
 ```
 
->The framework is still in an early stage, was tested in most supported bindings. Many improvements will be made.
+>The framework is still in an early stage, was tested in the basic supported bindings. Many improvements will be made.
+>Pipeline:
+>Better Documentation
+>Sample Functions
+>Finalize and publish the tests
+>Support more bindings
 
