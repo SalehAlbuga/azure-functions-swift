@@ -131,17 +131,16 @@ Currently the following are supported by Swift Functions. More bindings will be 
 
 | Swift Type                                                                                                                              | Azure Functions Binding             | Direction      |
 |----------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|----------------|
-| Blob     | Input and Ouput Blob                | in, out |
-| Blob     | Blob Trigger                        | in      | 
 | HttpRequest | HTTP Trigger                     | in             | 
 | HttpResponse| Output HTTP Response             | out            | 
+| TimerTrigger | Timer Trigger                       | in             | 
+| Message datatype **String** or **Data** (defined by Table)             | Input and Ouput Table               | in, out        | 
 | Message datatype **String** or **Data** (defined by Queue) | Output Queue Message                | out            | 
 | Message datatype **String** or **Data** (defined by Queue)      | Queue Trigger                       | in             | 
+| Blob     | Input and Ouput Blob                | in, out |
+| Blob     | Blob Trigger                        | in      | 
 | ServiceBusMessage | Service Bus Output Message          | out            | 
 | ServiceBusMessage | Service Bus Trigger                 | in             | 
-| Message datatype **String** or **Data** (defined by Table)             | Input and Ouput Table               | in, out        | 
-| TimerTrigger | Timer Trigger                       | in             | 
-
 
 
 Unlike C#, Swift does not support Attributes to mark bindings types and directions. Alternatively, the trigger, inputs and output of a Function is set in its constructor. Azure Functions in Swift must inhert the **Function** class from the framework.
