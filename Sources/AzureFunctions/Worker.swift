@@ -232,7 +232,11 @@ extension Worker {
             } catch {
                 var stRes = AzureFunctionsRpcMessages_StatusResult.init()
                 stRes.status = .failure
-                stRes.result = "Exception while executing function: \(error.localizedDescription)"
+                stRes.result = "Exception while executing Function"
+                var ex = AzureFunctionsRpcMessages_RpcException()
+                ex.message = error.localizedDescription
+                ex.source = function.name
+                stRes.exception = ex
                 res.result = stRes
                 sendMessage(content: .invocationResponse(res), requestId: requestId)
             }
