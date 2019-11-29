@@ -234,7 +234,7 @@ extension Worker {
                 stRes.status = .failure
                 stRes.result = "Exception while executing Function"
                 var ex = AzureFunctionsRpcMessages_RpcException()
-                ex.message = error.localizedDescription
+                ex.message = (error as NSError).localizedDescription
                 ex.source = function.name
                 stRes.exception = ex
                 res.result = stRes
