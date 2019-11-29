@@ -35,7 +35,7 @@ internal struct CodeGen {
     
         
         let localSetRes: String
-        if var envVars = registry.EnvironmentVariables {
+        if var envVars = registry.EnvironmentVariables, envVars.count > 0 {
             if let storage = registry.AzureWebJobsStorage {
                 envVars["AzureWebJobsStorage"] = storage
             }

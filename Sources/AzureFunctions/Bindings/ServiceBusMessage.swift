@@ -29,7 +29,7 @@ public class ServiceBusMessage: Binding {
     
     public init(name: String, topicName: String, subscriptionName: String, connection: String) {
         self.name = name
-        self.queueName = topicName
+        self.topicName = topicName
         self.subscriptionName = subscriptionName
         self.connection = connection
     }
