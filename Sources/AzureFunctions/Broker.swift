@@ -14,7 +14,7 @@ internal class Broker {
         // handle empty input!!
 
         guard let inputBinding = input else {
-            throw FunctionError.internalInconsistancyException("Cannot determin Function Input")
+            throw FunctionError.internalInconsistancyException("Cannot determine Function Input")
         }
         
             switch inputBinding {
@@ -37,6 +37,7 @@ internal class Broker {
                 try! function.exec(dictionary: dic, context: &context, callback: callback)
                 break
             default:
+                Logger.log("Got \(type(of: inputBinding))")
                 throw FunctionError.internalInconsistancyException("Function Input type cannot be determined")
             }
     }

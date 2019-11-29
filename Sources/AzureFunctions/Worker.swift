@@ -98,9 +98,9 @@ extension Worker {
     }
     
     func workerInitRequest(requestId: String, msg: AzureFunctionsRpcMessages_WorkerInitRequest) {
-        Logger.log("Responding to init request")
+        
         var res = AzureFunctionsRpcMessages_WorkerInitResponse()
-        res.workerVersion = "0.0.4"
+        res.workerVersion = "0.1.0"
         res.capabilities = ["TypedDataCollection": "TypedDataCollection"] //["RpcHttpBodyOnly": "true"
     
         var stRes = AzureFunctionsRpcMessages_StatusResult.init()
@@ -144,8 +144,6 @@ extension Worker {
     
     func functionLoadRequest(requestId: String, msg: AzureFunctionsRpcMessages_FunctionLoadRequest) {
         
-        Logger.log("Responding to func load request for \(msg.functionID)")
-        
         var res = AzureFunctionsRpcMessages_FunctionLoadResponse()
         res.functionID = msg.functionID
         
@@ -174,7 +172,6 @@ extension Worker {
     }
     
     func invocationRequest(requestId: String, msg: AzureFunctionsRpcMessages_InvocationRequest) throws {
-        Logger.log("Responding to func invocation request")
         
         var res = AzureFunctionsRpcMessages_InvocationResponse()
         res.invocationID = msg.invocationID
