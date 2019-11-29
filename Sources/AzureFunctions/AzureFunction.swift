@@ -58,6 +58,10 @@ open class Function {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
+    open func exec(sbMessage: ServiceBusMessage, context: inout Context, callback: @escaping callback) throws {
+           throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
+       }
+    
 }
 
 internal extension Function {

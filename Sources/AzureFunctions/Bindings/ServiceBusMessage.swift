@@ -14,7 +14,7 @@ public class ServiceBusMessage: Binding {
     public var topicName: String?
     public var subscriptionName: String?
     public var connection: String = ""
-    public var data: Any?
+    public var message: Any?
     public var properties: [String:String] = [:]
     
    internal init() {
@@ -29,7 +29,7 @@ public class ServiceBusMessage: Binding {
     
     public init(name: String, topicName: String, subscriptionName: String, connection: String) {
         self.name = name
-        self.queueName = topicName
+        self.topicName = topicName
         self.subscriptionName = subscriptionName
         self.connection = connection
     }

@@ -14,11 +14,18 @@ public final class FunctionRegistry {
     private var functionsInfo: [String: FunctionInfo] = [:]
     
     public var AzureWebJobsStorage: String?
+    public var EnvironmentVariables: [String: String]?
+    
     
     public init() { }
     
     public init(AzureWebJobsStorage: String) {
         self.AzureWebJobsStorage = AzureWebJobsStorage
+    }
+    
+    public init(AzureWebJobsStorage: String, EnvironmentVariables: [String: String]) {
+        self.AzureWebJobsStorage = AzureWebJobsStorage
+        self.EnvironmentVariables = EnvironmentVariables
     }
     
     public func register(_ function: Function.Type) {

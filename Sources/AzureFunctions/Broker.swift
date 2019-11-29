@@ -14,7 +14,7 @@ internal class Broker {
         // handle empty input!!
 
         guard let inputBinding = input else {
-            throw FunctionError.internalInconsistancyException("Cannot determin Function Input")
+            throw FunctionError.internalInconsistancyException("Nil Function Input")
         }
         
             switch inputBinding {
@@ -26,6 +26,9 @@ internal class Broker {
                 break
             case let blob as Blob:
                 try function.exec(blob: blob, context: &context, callback: callback)
+                break
+            case let sbMsg as ServiceBusMessage:
+                try function.exec(sbMessage: sbMsg, context: &context, callback: callback)
                 break
             case let data as Data:
                 try function.exec(data: data, context: &context, callback: callback)

@@ -63,7 +63,7 @@ internal final class RpcConverter {
         return td
     }
     
-    static func fromTypedData(data: AzureFunctionsRpcMessages_TypedData) throws -> Any?  {
+    static func fromTypedData(data: AzureFunctionsRpcMessages_TypedData, preferJsonInString: Bool = false) throws -> Any?  {
         var converted: Any?
         
         switch data.data {
@@ -72,7 +72,6 @@ internal final class RpcConverter {
             converted = httpReq
             break
         case let .some(.json(jsonStr)):
-            Logger.log("TD JSON \(jsonStr)")
             if let data = jsonStr.data(using: .utf8) {
                 do {
                     converted = try JSONSerialization.jsonObject(with: data, options: [])
@@ -96,7 +95,19 @@ internal final class RpcConverter {
             converted = data
             break
         case let .some(.string(string)):
-            converted = string
+            if !preferJsonInString {
+                converted = string
+            } else {
+                if let data = string.data(using: .utf8) {
+                    if string.starts(with: "[") {
+                        converted = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: String]] ?? string
+                    } else {
+                        converted = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String] ?? string
+                    }
+                } else {
+                    converted = string
+                }
+            }
             break
         case let .some(.double(double)):
             converted = double

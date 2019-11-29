@@ -51,7 +51,7 @@ internal final class BindingFactory {
                 
                let sbMsg = ServiceBusMessage()
                 sbMsg.name = sb.name
-                sbMsg.data = try RpcConverter.fromTypedData(data: binding.data)
+                sbMsg.message = try RpcConverter.fromTypedData(data: binding.data, preferJsonInString: true)
                 sbMsg.queueName = sb.queueName
                 sbMsg.topicName = sb.topicName
                 sbMsg.subscriptionName = sb.subscriptionName

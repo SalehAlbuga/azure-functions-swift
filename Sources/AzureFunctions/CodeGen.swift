@@ -24,7 +24,6 @@ internal struct CodeGen {
         let rootFolder = try Folder.init(path: rootDir)
         
         
-        print("Creating host.json")
         let hostRes: String
         if debug {
             hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJsonDebug, context: nil)
@@ -33,20 +32,35 @@ internal struct CodeGen {
         }
         let hostFile = try rootFolder.createFile(named: "host.json")
         try hostFile.write(hostRes)
+    
         
-        print("Creating local.settings.json")
         let localSetRes: String
-        
-        if let storage = registry.AzureWebJobsStorage {
+        if var envVars = registry.EnvironmentVariables, envVars.count > 0 {
+            if let storage = registry.AzureWebJobsStorage {
+                envVars["AzureWebJobsStorage"] = storage
+            }
+            
+            var envVarsString = ""
+            for setting in envVars {
+                envVarsString.append("\"\(setting.key)\": \"\(setting.value)\",")
+            }
+            
+            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": envVarsString])
+            
+        } else if let storage = registry.AzureWebJobsStorage {
             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": "\"AzureWebJobsStorage\": \"\(storage)\""])
         } else {
-             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
+            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
         }
+        //        if let storage = registry.AzureWebJobsStorage {
+//            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": "\"AzureWebJobsStorage\": \"\(storage)\""])
+//        } else {
+//             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
+//        }
        
         let localSetFile = try rootFolder.createFile(named: "local.settings.json")
         try localSetFile.write(localSetRes)
         
-        print("Creating worker.config.json")
         let workersFolder = try rootFolder.createSubfolderIfNeeded(withName: "workers")
         let swiftFolder = try workersFolder.createSubfolderIfNeeded(withName: "swift")
         let workerRes = try environment.renderTemplate(string: Templates.ProjectFiles.workerConfigJson, context: ["execPath": "\(swiftFolder.path)functions"])
