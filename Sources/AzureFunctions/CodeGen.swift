@@ -42,7 +42,7 @@ internal struct CodeGen {
             
             var envVarsString = ""
             for setting in envVars {
-                envVarsString.append("\(setting.key): \(setting.value),")
+                envVarsString.append("\"\(setting.key)\": \"\(setting.value)\",")
             }
             
             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": envVarsString])
