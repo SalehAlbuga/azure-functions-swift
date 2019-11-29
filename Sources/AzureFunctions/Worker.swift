@@ -230,14 +230,13 @@ extension Worker {
                     self.sendMessage(content: .invocationResponse(res), requestId: requestId)
                 }
             } catch {
-                
                 var stRes = AzureFunctionsRpcMessages_StatusResult.init()
                 stRes.status = .failure
-                stRes.result = "Exception while executing function: \(error)"
+                stRes.result = "Exception while executing function: \(error.localizedDescription)"
                 res.result = stRes
                 sendMessage(content: .invocationResponse(res), requestId: requestId)
             }
-        } else {            
+        } else {
             var stRes = AzureFunctionsRpcMessages_StatusResult.init()
             stRes.status = .failure
             stRes.result = "Cannot execute Function: not found"
