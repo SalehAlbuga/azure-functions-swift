@@ -56,7 +56,10 @@ internal final class BindingFactory {
                 sbMsg.topicName = sb.topicName
                 sbMsg.subscriptionName = sb.subscriptionName
                 
+                
+                Logger.log("metadata: \(metadata)")
                 if let meta = metadata, let props = meta["properties"] {
+                    Logger.log("converting props")
                     sbMsg.properties = try RpcConverter.fromTypedData(data: props) as! [String:String]
                 }
                 return sbMsg
