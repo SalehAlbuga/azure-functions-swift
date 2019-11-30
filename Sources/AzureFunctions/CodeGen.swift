@@ -52,6 +52,11 @@ internal struct CodeGen {
         } else {
             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
         }
+        //        if let storage = registry.AzureWebJobsStorage {
+//            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": "\"AzureWebJobsStorage\": \"\(storage)\""])
+//        } else {
+//             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
+//        }
        
         let localSetFile = try rootFolder.createFile(named: "local.settings.json")
         try localSetFile.write(localSetRes)
