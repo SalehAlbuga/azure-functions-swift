@@ -182,6 +182,8 @@ let tableVal = context.inputBindings["myTableInput"]
 ```swift
 context.outputBindings["myQueueOutput"] = "new item!"
 ```
+#### Framework updates
+As the framework is being actively updated make sure to run `swift package update` if you're having any issue to make sure you are using the latest version 
 
 ### Storage Connections
 In the generated `main.swift` you can define your debug `AzureWebJobsStorage` and optionally any other connections/environment vars.
