@@ -87,7 +87,7 @@ internal struct CodeGen {
                     let workerFile = try funcFolder.createFile(named: "function.json")
                     try workerFile.write(workerRes)
                 } else {
-                    print("Function \(name) not registered.")
+                    print("Function \(name) is not registered.")
                     if !debug {
                         print("Make sure to register \(name) or remove it")
                         exit(1)
