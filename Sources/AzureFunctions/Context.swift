@@ -11,8 +11,8 @@ public final class Context {
     
     internal var bindings: [String: Any] = [:]
     
-    var inputBindings: [String: Any] = [:]
-    var outputBindings: [String: Any] = [:]
+    public var inputBindings: [String: Any] = [:]
+    public var outputBindings: [String: Any] = [:]
     
     internal init () { }
     
