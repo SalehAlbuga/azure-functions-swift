@@ -82,6 +82,17 @@ extension Worker {
                 try self.invocationRequest(requestId: reqID, msg: invocationRequest)
             } catch {
                 Logger.log("Fatal Error: \(error.localizedDescription)")
+                var res = AzureFunctionsRpcMessages_InvocationResponse()
+//                res.invocationID = invocationRequest.invocationID
+//                var stRes = AzureFunctionsRpcMessages_StatusResult.init()
+//                stRes.status = .failure
+//                stRes.result = error.localizedDescription
+//                var ex = AzureFunctionsRpcMessages_RpcException()
+//                ex.message = error.localizedDescription
+//                ex.source = "Worker"
+//                stRes.exception = ex
+                res.result = failureStatusResult(result: error.localizedDescription, exceptionMessage: error.localizedDescription, source: "Worker")
+                sendMessage(content: .invocationResponse(res), requestId: reqID)
                 exit(1)
             }
             break
@@ -105,13 +116,9 @@ extension Worker {
     func workerInitRequest(requestId: String, msg: AzureFunctionsRpcMessages_WorkerInitRequest) {
         
         var res = AzureFunctionsRpcMessages_WorkerInitResponse()
-        res.workerVersion = "0.1.0"
+        res.workerVersion = "0.1.1"
         res.capabilities = ["TypedDataCollection": "TypedDataCollection"] //["RpcHttpBodyOnly": "true"
-        
-        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-        stRes.status = .success
-        
-        res.result = stRes
+        res.result = successStatusResult(nil)
         
         sendMessage(content: .workerInitResponse(res), requestId: requestId)
     
@@ -138,8 +145,7 @@ extension Worker {
         var res = AzureFunctionsRpcMessages_FunctionLoadResponse()
         res.functionID = msg.functionID
         
-        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-        
+//        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
         
         if let _ = self.registry.byName(name: msg.metadata.name) {
             registry.register(id: msg.functionID, forName: msg.metadata.name)
@@ -147,17 +153,16 @@ extension Worker {
             let info = FunctionInfo(withBindings: msg.metadata.bindings)
             registry.registerInfo(id: msg.functionID, info: info)
             registry.byId(id: msg.functionID)?.convertInputsToDictionary()
-            stRes.status = .success
+//            stRes.status = .success
+            res.result = successStatusResult(nil)
         } else {
-            stRes.status = .failure
-            stRes.result = "\(msg.metadata.name) is not found"
+            res.result = failureStatusResult(result: "Cannot load \(msg.metadata.name): not found", exceptionMessage: nil, source: nil)
+            Logger.log("Cannot load \(msg.metadata.name): not found")
+//            stRes.status = .failure
+//            stRes.result = "\(msg.metadata.name) is not found"
         }
         
-        res.result = stRes
-        
-        var resMsg = AzureFunctionsRpcMessages_StreamingMessage()
-        resMsg.requestID = requestId
-        
+//        res.result = stRes
         sendMessage(content: .functionLoadResponse(res), requestId: requestId)
         
     }
@@ -204,9 +209,7 @@ extension Worker {
                         res.returnValue = RpcConverter.toRpcTypedData(obj: result)
                     }
                     
-                    var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-                    stRes.status = .success
-                    res.result = stRes
+                    res.result = self.successStatusResult(nil)
                     
                     if let http: String = functionInfo.httpOutputBinding, context!.bindings[http] == nil, let httpRes = result as? HttpResponse {
                         context!.bindings[http] = httpRes
@@ -230,22 +233,23 @@ extension Worker {
                     self.sendMessage(content: .invocationResponse(res), requestId: requestId)
                 }
             } catch {
-                var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-                stRes.status = .failure
-                stRes.result = "Exception while executing Function"
-                var ex = AzureFunctionsRpcMessages_RpcException()
-                ex.message = (error as NSError).localizedDescription
-                ex.source = function.name
-                stRes.exception = ex
-                res.result = stRes
+//                var stRes = AzureFunctionsRpcMessages_StatusResult.init()
+//                stRes.status = .failure
+//                stRes.result = "Exception while executing Function"
+//                var ex = AzureFunctionsRpcMessages_RpcException()
+//                ex.message = error.localizedDescription
+//                ex.source = function.name
+//                stRes.exception = ex
+                
+                res.result = failureStatusResult(result: "Exception while executing Function \(function.name ?? "")", exceptionMessage: error.localizedDescription, source: function.name)
                 sendMessage(content: .invocationResponse(res), requestId: requestId)
             }
         } else {
-            var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-            stRes.status = .failure
-            stRes.result = "Cannot execute Function: not found"
-            res.result = stRes
-            
+//            var stRes = AzureFunctionsRpcMessages_StatusResult.init()
+//            stRes.status = .failure
+//            stRes.result = "Cannot execute Function: not found"
+//            res.result = stRes
+            res.result = failureStatusResult(result: "Cannot execute Function: not found", exceptionMessage: nil, source: nil)
             sendMessage(content: .invocationResponse(res), requestId: requestId)
         }
     }
@@ -280,6 +284,31 @@ extension Worker {
         resMsg.content = content
         
         eventStream.sendMessage(resMsg, promise: nil)
+    }
+    
+    func successStatusResult(_ result: String?) -> AzureFunctionsRpcMessages_StatusResult {
+        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
+        stRes.status = .success
+        if let res = result {
+            stRes.result = res
+        }
+        return stRes
+    }
+    
+    func failureStatusResult(result: String, exceptionMessage: String?, source: String?) -> AzureFunctionsRpcMessages_StatusResult {
+        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
+        stRes.status = .failure
+        stRes.result = result
+        
+        if let ex = exceptionMessage {
+            var exception = AzureFunctionsRpcMessages_RpcException()
+            exception.message = ex
+            if let src = exceptionMessage {
+                exception.source = src
+            }
+        }
+        
+        return stRes
     }
     
 }
