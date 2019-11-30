@@ -88,7 +88,7 @@ internal struct CodeGen {
                     try workerFile.write(workerRes)
                 } else {
                     print("Function \(name) not registered.")
-                    if debug {
+                    if !debug {
                         print("Make sure to register \(name) or remove it")
                         exit(1)
                     }
