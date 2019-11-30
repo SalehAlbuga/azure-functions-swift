@@ -10,6 +10,8 @@ in [Swift](https://swift.org).
 >
 > _Microsoft and Azure are registered trademarks of Microsoft Corporation._
 
+#### Documentation [home page](https://swiftfunc.developerhub.io/) _(coming soon!)_
+
 ## Example
 
 An HTTP Function:
@@ -143,7 +145,7 @@ Currently the following are supported by Swift Functions. More bindings will be 
 | ServiceBusMessage | Service Bus Trigger                 | in             | 
 
 
-Unlike C#, Swift does not support Attributes to mark bindings types and directions. Alternatively, the trigger, inputs and output of a Function is set in its constructor. Azure Functions in Swift must inhert the **Function** class from the framework.
+Unlike C#, Swift does not support Attributes to mark bindings types and directions. Alternatively, the trigger, inputs and output of a Function is set in its constructor. Azure Functions in Swift must inherit the **Function** class from the framework.
 
 ```swift
 import AzureFunctions
