@@ -68,7 +68,7 @@ internal final class Worker: ConnectivityStateDelegate, WorkerChannelProtocol {
 extension Worker {
     
     func streamHandler(message: AzureFunctionsRpcMessages_StreamingMessage) {
-        Logger.log(" evntStr received:: \(message)")
+        
         let reqID = message.requestID
         switch message.content {
         case let .some(.workerInitRequest(workerInitRequest)):
