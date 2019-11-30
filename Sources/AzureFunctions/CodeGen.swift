@@ -52,11 +52,6 @@ internal struct CodeGen {
         } else {
             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
         }
-        //        if let storage = registry.AzureWebJobsStorage {
-//            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": "\"AzureWebJobsStorage\": \"\(storage)\""])
-//        } else {
-//             localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
-//        }
        
         let localSetFile = try rootFolder.createFile(named: "local.settings.json")
         try localSetFile.write(localSetRes)
@@ -92,8 +87,11 @@ internal struct CodeGen {
                     let workerFile = try funcFolder.createFile(named: "function.json")
                     try workerFile.write(workerRes)
                 } else {
-                    print("function not found")
-                    exit(1)
+                    print("Function \(name) not registered.")
+                    if debug {
+                        print("Make sure to register \(name) or remove it")
+                        exit(1)
+                    }
                 }
             } catch {
                 print("error generating bindings \(error.localizedDescription)")
