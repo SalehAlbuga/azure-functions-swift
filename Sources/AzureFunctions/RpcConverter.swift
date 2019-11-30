@@ -24,7 +24,8 @@ internal final class RpcConverter {
             td.json = dic.description
             break
         case let data as Data:
-            td.bytes = data
+            td.stream = data
+//            td.bytes = data
             break
         case let int as Int:
             td.int = Int64(int)
