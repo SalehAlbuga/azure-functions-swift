@@ -100,9 +100,9 @@ internal final class RpcConverter {
             } else {
                 if let data = string.data(using: .utf8) {
                     if string.starts(with: "[") {
-                        converted = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: String]] ?? string
+                        converted = (try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: String]]) ?? string
                     } else {
-                        converted = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String] ?? string
+                        converted = (try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String]) ?? string
                     }
                 } else {
                     converted = string
