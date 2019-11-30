@@ -1,5 +1,5 @@
 //
-//  Worker.swift
+//  WorkerChannel.swift
 //  SwiftFunc
 //
 //  Created by Saleh on 9/6/19.
@@ -11,7 +11,7 @@ import NIO
 import Dispatch
 
 
-internal final class Worker: ConnectivityStateDelegate, WorkerChannelProtocol {
+internal final class WorkerChannel: WorkerChannelProtocol {
     
     var clientService: AzureFunctionsRpcMessages_FunctionRpcServiceClient!
     
@@ -33,14 +33,9 @@ internal final class Worker: ConnectivityStateDelegate, WorkerChannelProtocol {
     }
     
     
-    public func connectivityStateDidChange(from oldState: ConnectivityState, to newState: ConnectivityState) {
-        //        Logger.log("Connectivity status:: \(oldState) -> \(newState)")
-    }
-    
-    
     public func runClient(host: String, port: Int) {
         
-        Logger.log("Worker Starting")
+        Logger.log("WorkerChannel Starting")
         
         let clientEventLoopGroup = PlatformSupport.makeEventLoopGroup(loopCount: 1)
         let configuration = ClientConnection.Configuration(
@@ -53,22 +48,20 @@ internal final class Worker: ConnectivityStateDelegate, WorkerChannelProtocol {
         // This is our generated client, we only need to pass it a connection.
         self.clientService = AzureFunctionsRpcMessages_FunctionRpcServiceClient(connection: connection)
         
-        clientService.connection.connectivity.delegate = self
-        
         eventStream = clientService.eventStream(handler: streamHandler(message:))
         
         startStream(requestId: requestId!, msg: AzureFunctionsRpcMessages_StartStream())
-
+        
         dispatchMain()
     }
     
 }
 
 // Channel
-extension Worker {
+extension WorkerChannel {
     
     func streamHandler(message: AzureFunctionsRpcMessages_StreamingMessage) {
-        Logger.log(" evntStr received:: \(message)")
+        
         let reqID = message.requestID
         switch message.content {
         case let .some(.workerInitRequest(workerInitRequest)):
@@ -78,7 +71,15 @@ extension Worker {
             self.functionLoadRequest(requestId: reqID, msg: functionLoadRequest)
             break
         case let .some(.invocationRequest(invocationRequest)):
-            try! self.invocationRequest(requestId: reqID, msg: invocationRequest)
+            do {
+                try self.invocationRequest(requestId: reqID, msg: invocationRequest)
+            } catch {
+                Logger.log("Fatal Error: \(error.localizedDescription)")
+                var res = AzureFunctionsRpcMessages_InvocationResponse()
+                res.result = failureStatusResult(result: error.localizedDescription, exceptionMessage: error.localizedDescription, source: "Worker")
+                sendMessage(content: .invocationResponse(res), requestId: reqID)
+                exit(1)
+            }
             break
         case let .some(.functionEnvironmentReloadRequest(envReloadRequest)):
             self.functionEnvironmentReloadRequest(requestId: reqID, msg: envReloadRequest)
@@ -100,30 +101,12 @@ extension Worker {
     func workerInitRequest(requestId: String, msg: AzureFunctionsRpcMessages_WorkerInitRequest) {
         
         var res = AzureFunctionsRpcMessages_WorkerInitResponse()
-        res.workerVersion = "0.1.0"
+        res.workerVersion = "0.1.1"
         res.capabilities = ["TypedDataCollection": "TypedDataCollection"] //["RpcHttpBodyOnly": "true"
-    
-        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-        stRes.status = .success
-        
-        res.result = stRes
+        res.result = successStatusResult(nil)
         
         sendMessage(content: .workerInitResponse(res), requestId: requestId)
-        
-//        var resMsg = AzureFunctionsRpcMessages_StreamingMessage()
-//        resMsg.requestID = requestId
-//
-//        resMsg.content = .workerInitResponse(res)
-//
-//
-//        let _ = eventStream.sendMessage(resMsg).always { (result) in
-//            switch result {
-//            case let .success(sucresult):
-//                Logger.log(" workerInitResponse sent:: \(sucresult)")
-//            case let .failure(error):
-//                Logger.log(" workerInitResponse sending error:: \(error)")
-//            }
-//        }
+    
     }
     
     func workerHeartbeat(requestId: String, msg: AzureFunctionsRpcMessages_WorkerHeartbeat) {
@@ -147,25 +130,17 @@ extension Worker {
         var res = AzureFunctionsRpcMessages_FunctionLoadResponse()
         res.functionID = msg.functionID
         
-        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-        
-        
         if let _ = self.registry.byName(name: msg.metadata.name) {
             registry.register(id: msg.functionID, forName: msg.metadata.name)
             //            self.functions.removeValue(forKey: msg.metadata.name)
             let info = FunctionInfo(withBindings: msg.metadata.bindings)
             registry.registerInfo(id: msg.functionID, info: info)
             registry.byId(id: msg.functionID)?.convertInputsToDictionary()
-            stRes.status = .success
+            res.result = successStatusResult(nil)
         } else {
-            Logger.log("\(msg.metadata.name) is not found")
-            stRes.status = .failure
+            res.result = failureStatusResult(result: "Cannot load \(msg.metadata.name): not found", exceptionMessage: nil, source: nil)
+            Logger.log("Cannot load \(msg.metadata.name): not found")
         }
-        
-        res.result = stRes
-        
-        var resMsg = AzureFunctionsRpcMessages_StreamingMessage()
-        resMsg.requestID = requestId
         
         sendMessage(content: .functionLoadResponse(res), requestId: requestId)
         
@@ -206,46 +181,42 @@ extension Worker {
             var context = Context()
             context.inputBindings = inputBindings
             
-            try Broker.run(function: function, input: triggerInput, context: &context) { [weak context, self]  result in
-                
-                if (result as? Bool) != true {
-                    res.returnValue = RpcConverter.toRpcTypedData(obj: result)
+            do {
+                try Broker.run(function: function, input: triggerInput, context: &context) { [weak context, self]  result in
+                    
+                    if (result as? Bool) != true {
+                        res.returnValue = RpcConverter.toRpcTypedData(obj: result)
+                    }
+                    
+                    res.result = self.successStatusResult(nil)
+                    
+                    if let http: String = functionInfo.httpOutputBinding, context!.bindings[http] == nil, let httpRes = result as? HttpResponse {
+                        context!.bindings[http] = httpRes
+                    }
+                    
+                    res.outputData = functionInfo.outputBindings
+                        .filter({ (key, val) -> Bool in
+                            return context!.bindings[key] != nil
+                        }).map({ (key, binding) -> AzureFunctionsRpcMessages_ParameterBinding in
+                            
+                            var paramBinding = AzureFunctionsRpcMessages_ParameterBinding()
+                            paramBinding.name = key
+                            
+                            var td = AzureFunctionsRpcMessages_TypedData()
+                            td = RpcConverter.toRpcTypedData(obj:context!.bindings[key]!)
+                            paramBinding.data = td
+                            
+                            return paramBinding
+                        })
+                    
+                    self.sendMessage(content: .invocationResponse(res), requestId: requestId)
                 }
-                
-                var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-                stRes.status = .success
-                res.result = stRes
-                
-                if let http: String = functionInfo.httpOutputBinding, context!.bindings[http] == nil, let httpRes = result as? HttpResponse {
-                    context!.bindings[http] = httpRes
-                }
-                
-                res.outputData = functionInfo.outputBindings
-                    .filter({ (key, val) -> Bool in
-                        return context!.bindings[key] != nil
-                    }).map({ (key, binding) -> AzureFunctionsRpcMessages_ParameterBinding in
-                        
-                        var paramBinding = AzureFunctionsRpcMessages_ParameterBinding()
-                        paramBinding.name = key
-                        
-                        var td = AzureFunctionsRpcMessages_TypedData()
-                        td = RpcConverter.toRpcTypedData(obj:context!.bindings[key]!)
-                        paramBinding.data = td
-                        
-                        return paramBinding
-                    })
-
-                
-                self.sendMessage(content: .invocationResponse(res), requestId: requestId)
+            } catch {
+                res.result = failureStatusResult(result: "Exception while executing Function \(function.name ?? "")", exceptionMessage: error.localizedDescription, source: function.name)
+                sendMessage(content: .invocationResponse(res), requestId: requestId)
             }
         } else {
-            var typedData = AzureFunctionsRpcMessages_TypedData()
-            typedData.data = .string("Cannot execute Function: not found")
-            
-            var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-            stRes.status = .failure
-            res.result = stRes
-            
+            res.result = failureStatusResult(result: "Cannot execute Function: not found", exceptionMessage: nil, source: nil)
             sendMessage(content: .invocationResponse(res), requestId: requestId)
         }
     }
@@ -260,11 +231,11 @@ extension Worker {
         
         var res = AzureFunctionsRpcMessages_FunctionEnvironmentReloadResponse()
         var stRes = AzureFunctionsRpcMessages_StatusResult.init()
-    
+        
         envVars.merge(msg.environmentVariables) { (_, new) -> String in new }
         Process().environment = envVars
         stRes.status = .success
-    
+        
         res.result = stRes
         sendMessage(content: .functionEnvironmentReloadResponse(res), requestId: requestId)
         
@@ -272,7 +243,7 @@ extension Worker {
 }
 
 // Helpers
-extension Worker {
+extension WorkerChannel {
     
     func sendMessage(content: AzureFunctionsRpcMessages_StreamingMessage.OneOf_Content, requestId: String) {
         var resMsg = AzureFunctionsRpcMessages_StreamingMessage()
@@ -280,6 +251,31 @@ extension Worker {
         resMsg.content = content
         
         eventStream.sendMessage(resMsg, promise: nil)
+    }
+    
+    func successStatusResult(_ result: String?) -> AzureFunctionsRpcMessages_StatusResult {
+        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
+        stRes.status = .success
+        if let res = result {
+            stRes.result = res
+        }
+        return stRes
+    }
+    
+    func failureStatusResult(result: String, exceptionMessage: String?, source: String?) -> AzureFunctionsRpcMessages_StatusResult {
+        var stRes = AzureFunctionsRpcMessages_StatusResult.init()
+        stRes.status = .failure
+        stRes.result = result
+        
+        if let ex = exceptionMessage {
+            var exception = AzureFunctionsRpcMessages_RpcException()
+            exception.message = ex
+            if let src = exceptionMessage {
+                exception.source = src
+            }
+        }
+        
+        return stRes
     }
     
 }

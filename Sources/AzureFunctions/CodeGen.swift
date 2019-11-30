@@ -92,8 +92,11 @@ internal struct CodeGen {
                     let workerFile = try funcFolder.createFile(named: "function.json")
                     try workerFile.write(workerRes)
                 } else {
-                    print("function not found")
-                    exit(1)
+                    print("Function \(name) is not registered.")
+                    if !debug {
+                        print("Make sure to register \(name) or remove it")
+                        exit(1)
+                    }
                 }
             } catch {
                 print("error generating bindings \(error.localizedDescription)")

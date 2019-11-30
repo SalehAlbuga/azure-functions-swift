@@ -56,9 +56,6 @@ internal final class BindingFactory {
                 sbMsg.topicName = sb.topicName
                 sbMsg.subscriptionName = sb.subscriptionName
                 
-                if let meta = metadata, let props = meta["properties"] {
-                    sbMsg.properties = try RpcConverter.fromTypedData(data: props) as! [String:String]
-                }
                 return sbMsg
             } else {
                 throw FunctionError.internalInconsistancyException("Expected blob binding type, got \(rpcBinding.type). Please make sure function.json matches the function definition.")

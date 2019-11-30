@@ -12,7 +12,7 @@ public final class AzureFunctionsWorker {
     public static let shared = AzureFunctionsWorker()
     
     private init () { }
-    internal var worker: Worker!
+    internal var worker: WorkerChannel!
     
     
     public func main(registry: FunctionRegistry) {
@@ -93,7 +93,7 @@ public final class AzureFunctionsWorker {
     }
     
     func startWorker(host: String, port :String, reqId: String, workerId: String, msgLen: Int32, registry: FunctionRegistry) {
-        worker = Worker(workerId: workerId, requestId: reqId, messageLength: msgLen, registry: registry)
+        worker = WorkerChannel(workerId: workerId, requestId: reqId, messageLength: msgLen, registry: registry)
         worker.runClient(host: host, port: Int(port)!)
     }
 }

@@ -15,7 +15,6 @@ public class ServiceBusMessage: Binding {
     public var subscriptionName: String?
     public var connection: String = ""
     public var message: Any?
-    public var properties: [String:String] = [:]
     
    internal init() {
         

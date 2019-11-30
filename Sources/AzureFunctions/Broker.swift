@@ -37,7 +37,7 @@ internal class Broker {
                 try function.exec(string: string, context: &context, callback: callback)
                 break
             case let dic as [String:Any]:
-                try! function.exec(dictionary: dic, context: &context, callback: callback)
+                try function.exec(dictionary: dic, context: &context, callback: callback)
                 break
             default:
                 throw FunctionError.internalInconsistancyException("Function Input type cannot be determined")
