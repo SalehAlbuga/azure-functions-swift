@@ -68,7 +68,7 @@ Install the latest [Azure Functions Core Tools](https://docs.microsoft.com/en-us
 
 Just like Core Tools, Swift Functions Tools make functions development easier and helps in initializing the project and running the Functions locally. 
 
-You can install it from Homebrew 🍺
+You can install it from [Homebrew](https://brew.sh) 🍺
 ```bash
 brew install salehalbuga/formulae/swift-func
 ```
@@ -183,7 +183,17 @@ let tableVal = context.inputBindings["myTableInput"]
 context.outputBindings["myQueueOutput"] = "new item!"
 ```
 #### Framework updates
-As the framework is being actively updated make sure to run `swift package update` if you're having any issue to make sure you are using the latest version 
+As the framework is being actively updated, update the framework and the tools if you're having any issues or want to have the latest features and improvements.
+
+To update the framework:
+```bash
+swift package update
+```
+
+To update the tools:
+```bash
+brew upgrade salehalbuga/formulae/swift-func
+```
 
 ### Storage Connections
 In the generated `main.swift` you can define your debug `AzureWebJobsStorage` and optionally any other connections/environment vars.
