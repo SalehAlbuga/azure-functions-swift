@@ -10,7 +10,7 @@ in [Swift](https://swift.org).
 >
 > _Microsoft and Azure are registered trademarks of Microsoft Corporation._
 
-#### Documentation [home page](https://swiftfunc.developerhub.io/) _(coming soon!)_
+#### Documentation [home page](https://swiftfunc.developerhub.io/) 
 
 ## Example
 
@@ -109,7 +109,7 @@ Run `swiftfunc run` in the project directory to run your Swift Functions project
 
 ## Deploying to Azure 
 
-Curently Swift Functions Tools do not provide a commad to deploy to Azure. To deploy the Function App to Azure, you'll need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
+Curently Swift Functions Tools do not provide a command to deploy to Azure. To deploy the Function App to Azure, you'll need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
 To build the image:
 ```bash
 docker build -t <imageTag> .
