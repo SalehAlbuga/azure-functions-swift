@@ -1,6 +1,9 @@
 # Azure Functions for Swift ⚡️
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
+[![version](https://img.shields.io/github/v/release/salehalbuga/azure-functions-swift?include_prereleases&label=version)]
+[![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+
 
 Write [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
 in [Swift](https://swift.org).
