@@ -109,11 +109,10 @@ internal extension Function {
         
         for binding in outputBindings {
             bindings.append(try (binding as! BindingCapability).jsonDescription(direction: .output))
-            
         }
         
         if trigger is HttpRequest && outputBindings.count == 0 {
-            bindings.append(try HttpResponse().jsonDescription(direction: .output))
+            bindings.append(try HttpResponse(bindingName: "$return").jsonDescription(direction: .output))
         }
         
         let dic: [String : Any] = ["generatedBy": "azure-functions-swift",

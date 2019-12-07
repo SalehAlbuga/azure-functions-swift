@@ -63,7 +63,7 @@ internal final class BindingFactory {
         case _ as Queue, _ as Table:
             return nil
         default:
-            throw FunctionError.internalInconsistancyException("Cannot build binding for type of '\(binding.name)'")
+            throw FunctionError.internalInconsistancyException("Cannot build binding for type of '\(binding.name)', type unsupported")
         }
     }
     
