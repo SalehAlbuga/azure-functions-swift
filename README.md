@@ -1,6 +1,9 @@
 # Azure Functions for Swift ⚡️
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
+[![ver](https://img.shields.io/github/v/release/salehalbuga/azure-functions-swift?include_prereleases&label=version)](https://swiftfunc.developerhub.io)
+[![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+
 
 Write [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
 in [Swift](https://swift.org).
@@ -9,6 +12,8 @@ in [Swift](https://swift.org).
 > This project is not an official Azure project.
 >
 > _Microsoft and Azure are registered trademarks of Microsoft Corporation._
+
+#### Documentation [home page](https://swiftfunc.developerhub.io/) 
 
 ## Example
 
@@ -68,7 +73,7 @@ Install the latest [Azure Functions Core Tools](https://docs.microsoft.com/en-us
 
 Just like Core Tools, Swift Functions Tools make functions development easier and helps in initializing the project and running the Functions locally. 
 
-You can install it from Homebrew 🍺
+You can install it from [Homebrew](https://brew.sh) 🍺
 ```bash
 brew install salehalbuga/formulae/swift-func
 ```
@@ -107,15 +112,16 @@ Run `swiftfunc run` in the project directory to run your Swift Functions project
 
 ## Deploying to Azure 
 
-Curently Swift Functions Tools do not provide a commad to deploy to Azure. To deploy the Function App to Azure, you'll need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
-To build the image:
+Curently Swift Functions Tools do not provide a command to deploy to Azure. To deploy the Function App to Azure, you'll need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
+
+Build the image
 ```bash
 docker build -t <imageTag> .
 ```
 If you're using DockerHub then the tag would be `username/imageName:version`. 
 If you're using ACR ([Azure Container Registry](https://docs.microsoft.com/en-us/azure/container-registry/)) or any other private registry the tag would be `registryURL/imageName:version`
 
-Then push it the built image
+Then push it
 ```bash
 docker push <imageTag>
 ```
@@ -137,13 +143,13 @@ Currently the following are supported by Swift Functions. More bindings will be 
 | Message datatype **String** (binding defined by Table in constructor)             | Input and Ouput Table               | in, out        | 
 | Message datatype **String** (binding defined by Queue in constructor) | Output Queue Message                | out            | 
 | Message datatype **String** (binding defined by Queue in constructor)      | Queue Trigger                       | in             | 
-| Blob     | Input and Ouput Blob                | in, out |
+| Data     | Input Blob                | in |
 | Blob     | Blob Trigger                        | in      | 
 | ServiceBusMessage | Service Bus Output Message          | out            | 
 | ServiceBusMessage | Service Bus Trigger                 | in             | 
 
 
-Unlike C#, Swift does not support Attributes to mark bindings types and directions. Alternatively, the trigger, inputs and output of a Function is set in its constructor. Azure Functions in Swift must inhert the **Function** class from the framework.
+Unlike C#, Swift does not support Attributes to mark bindings types and directions. Alternatively, the trigger, inputs and output of a Function is set in its constructor. Azure Functions in Swift must inherit the **Function** class from the framework.
 
 ```swift
 import AzureFunctions
@@ -181,6 +187,18 @@ let tableVal = context.inputBindings["myTableInput"]
 
 ```swift
 context.outputBindings["myQueueOutput"] = "new item!"
+```
+#### Framework updates
+As the framework is being actively updated, update the framework and the tools if you're having any issues or want to have the latest features and improvements.
+
+To update the framework:
+```bash
+swift package update
+```
+
+To update the tools:
+```bash
+brew upgrade salehalbuga/formulae/swift-func
 ```
 
 ### Storage Connections
