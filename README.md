@@ -113,14 +113,15 @@ Run `swiftfunc run` in the project directory to run your Swift Functions project
 ## Deploying to Azure 
 
 Curently Swift Functions Tools do not provide a command to deploy to Azure. To deploy the Function App to Azure, you'll need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
-To build the image:
+
+Build the image
 ```bash
 docker build -t <imageTag> .
 ```
 If you're using DockerHub then the tag would be `username/imageName:version`. 
 If you're using ACR ([Azure Container Registry](https://docs.microsoft.com/en-us/azure/container-registry/)) or any other private registry the tag would be `registryURL/imageName:version`
 
-Then push it the built image
+Then push it
 ```bash
 docker push <imageTag>
 ```
