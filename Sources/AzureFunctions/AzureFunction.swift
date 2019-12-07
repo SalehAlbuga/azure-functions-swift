@@ -111,7 +111,9 @@ internal extension Function {
             bindings.append(try (binding as! BindingCapability).jsonDescription(direction: .output))
         }
         
-        if trigger is HttpRequest && outputBindings.count == 0 {
+        if trigger is HttpRequest && (outputBindings.count == 0 || !outputBindings.contains { (binding) -> Bool in
+            return binding is HttpResponse
+            }) {
             bindings.append(try HttpResponse(bindingName: "$return").jsonDescription(direction: .output))
         }
         
