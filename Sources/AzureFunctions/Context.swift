@@ -16,6 +16,13 @@ public final class Context {
     
     internal init () { }
     
+    internal func prepBindings() {
+        self.bindings = inputBindings
+        self.bindings.merge(self.outputBindings) { (current, _) -> Any in
+            current
+        }
+    }
+    
     public func log(_ message: String) {
         Logger.log(message)
     }

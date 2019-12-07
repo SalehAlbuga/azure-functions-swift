@@ -194,6 +194,8 @@ extension WorkerChannel {
                         context!.bindings[http] = httpRes
                     }
                     
+                    context!.prepBindings()
+                    
                     res.outputData = functionInfo.outputBindings
                         .filter({ (key, val) -> Bool in
                             return context!.bindings[key] != nil
