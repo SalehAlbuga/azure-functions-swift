@@ -1,5 +1,5 @@
 //
-//  Queue.swift
+//  ServiceBusMessage.swift
 //  SwiftFunc
 //
 //  Created by Saleh on 10/26/19.
