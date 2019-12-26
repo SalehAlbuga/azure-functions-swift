@@ -143,7 +143,8 @@ Currently the following are supported by Swift Functions. More bindings will be 
 | Message datatype **String** (binding defined by Table in constructor)             | Input and Ouput Table               | in, out        | 
 | Message datatype **String** (binding defined by Queue in constructor) | Output Queue Message                | out            | 
 | Message datatype **String** (binding defined by Queue in constructor)      | Queue Trigger                       | in             | 
-| Data     | Input Blob                | in |
+| Blob (the blob data prob is either String or Data)     | Input Blob                | in |
+| String or Data     | Output Blob                | out |
 | Blob     | Blob Trigger                        | in      | 
 | ServiceBusMessage | Service Bus Output Message          | out            | 
 | ServiceBusMessage | Service Bus Trigger                 | in             | 
