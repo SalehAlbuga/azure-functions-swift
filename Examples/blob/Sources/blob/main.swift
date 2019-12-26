@@ -12,7 +12,7 @@ import AzureFunctions
 let registry = FunctionRegistry()
 
 // ****** optional: set debug AzureWebJobsStorage or other vars ******
-registry.AzureWebJobsStorage = "yourDebugConnection" //Remove before deploying. Do not commit or push any Storage Account keys
+//registry.AzureWebJobsStorage = "yourDebugConnection" //Remove before deploying. Do not commit or push any Storage Account keys
 //registry.EnvironmentVariables = ["fooConnection": "bar"]
 
 // ******
