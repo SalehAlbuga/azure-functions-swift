@@ -14,8 +14,7 @@ public class Blob: Binding {
     public var path: String = ""
     public var url: String = ""
     public var blob: Any?
-    public var metadata: [String:String] = [:]
-    public var properties: [String:String] = [:]
+    public var properties: [String:Any] = [:]
     
     internal init() {
         

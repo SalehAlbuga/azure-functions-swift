@@ -39,8 +39,8 @@ internal final class BindingFactory {
                 
                 blob.name = b.name
                 blob.path = b.path
-                if let meta = metadata, let props = meta["properties"] {
-                    blob.properties = try RpcConverter.fromTypedData(data: props) as! [String:String]
+                if let meta = metadata, let props = meta["Properties"] {
+                    blob.properties = try (RpcConverter.fromTypedData(data: props) as? [String:Any] ?? [:])
                 }
                 return blob
             } else {
