@@ -68,7 +68,6 @@ extension HttpResponse: BindingCapability {
         
         var props: [String: Any] = [
             Definitions.Bindings.Keys.TypeKey: HttpResponse.typeKey,
-//            Definitions.Bindings.Keys.Name: name == "" ? name : "$return",
             Definitions.Bindings.Keys.Direction: Definitions.Bindings.DirectionOut,
         ]
         
