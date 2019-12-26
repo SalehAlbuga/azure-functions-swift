@@ -12,7 +12,7 @@ import AzureFunctions
 let registry = FunctionRegistry()
 
 // ****** optional: set debug AzureWebJobsStorage or other vars ******
-registry.AzureWebJobsStorage = "DefaultEndpointsProtocol=https;AccountName=linuxappstorage;AccountKey=2LhvsBsrVxef2AgxY87ByNhdYDjm9Ehl70Mu6W97vw3aYS5mvnwfhUiiaqhG+w/B4meuaEfiZTWJm2Z1TeuFsQ==;EndpointSuffix=core.windows.net" //Remove before deploying. Do not commit or push any Storage Account keys
+//registry.AzureWebJobsStorage = "yourDebugConnection" //Remove before deploying. Do not commit or push any Storage Account keys
 //registry.EnvironmentVariables = ["fooConnection": "bar"]
 
 // ******
