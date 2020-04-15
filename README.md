@@ -149,8 +149,7 @@ Currently the following are supported by Swift Functions. More bindings will be 
 | ServiceBusMessage | Service Bus Output Message          | out            | 
 | ServiceBusMessage | Service Bus Trigger                 | in             | 
 
-
-Unlike C#, Swift does not support Attributes to mark bindings types and directions. Alternatively, the trigger, inputs and output of a Function is set in its constructor. Azure Functions in Swift must inherit the **Function** class from the framework.
+Currently, tThe trigger, inputs and output of a Function are set in its constructor. Azure Functions in Swift must inherit the **Function** class from the framework.
 
 ```swift
 import AzureFunctions
