@@ -62,13 +62,7 @@ internal struct CodeGen {
         let workerFile = try swiftFolder.createFile(named: "worker.config.json")
         try workerFile.write(workerRes)
         
-        #if os(Linux)
-        let releaseFolder = "x86_64-unknown-linux"
-        #else
-        let releaseFolder = "x86_64-apple-macosx"
-        #endif
-        
-        try File.init(path: "\(sourceDir)/.build/\(releaseFolder)/release/functions").copy(to: swiftFolder)
+        try File.init(path: "\(sourceDir)/.build/release/functions").copy(to: swiftFolder)
         
         
         for file in try Folder(path: "\(sourceDir)/Sources/\(projectName)/functions").files {
