@@ -9,13 +9,15 @@ import Foundation
 
 public final class FunctionRegistry {
     
-    private var functionsByName: [String: Function] = [:]
+    internal var functionsByName: [String: Function] = [:]
     private var functionsById: [String: Function] = [:]
     private var functionsInfo: [String: FunctionInfo] = [:]
     
     public var AzureWebJobsStorage: String?
     public var EnvironmentVariables: [String: String]?
     
+    public var ExtensionBundleId: String?
+    public var ExtensionBundleVersion: String?
     
     public init() { }
     
@@ -56,7 +58,7 @@ public final class FunctionRegistry {
     
     internal func validateBindings() {
         for function in functionsByName.values {
-            function.validationBindings()
+            function.validateBindings()
         }
     }
     

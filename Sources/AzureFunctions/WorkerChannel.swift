@@ -12,8 +12,8 @@ import Dispatch
 
 
 internal final class WorkerChannel: WorkerChannelProtocol {
-    
-    var clientService: AzureFunctionsRpcMessages_FunctionRpcServiceClient!
+
+    var clientService: AzureFunctionsRpcMessages_FunctionRpcClient!
     
     var workerId: String?
     var requestId: String?
@@ -45,8 +45,7 @@ internal final class WorkerChannel: WorkerChannelProtocol {
         
         let connection = ClientConnection(configuration: configuration)
         
-        // This is our generated client, we only need to pass it a connection.
-        self.clientService = AzureFunctionsRpcMessages_FunctionRpcServiceClient(connection: connection)
+        self.clientService = AzureFunctionsRpcMessages_FunctionRpcClient(channel: connection)
         
         eventStream = clientService.eventStream(handler: streamHandler(message:))
         

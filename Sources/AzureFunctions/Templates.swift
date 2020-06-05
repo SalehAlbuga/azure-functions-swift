@@ -11,16 +11,35 @@ internal struct Templates {
     
     struct ProjectFiles {
         
+        static let defaultExtensionsBundleId = "Microsoft.Azure.Functions.ExtensionBundle"
+        static let defaultExtensionsVersion = "[1.*, 2.0.0)"
+        
         static let functionJson = """
         {{ bindings }}
         """
         
-        static let hostJsonDebug = """
+        static let hostJsonExtensions = """
         {
             "version": "2.0",
             "extensionBundle": {
-                "id": "Microsoft.Azure.Functions.ExtensionBundle",
-                "version": "[1.*, 2.0.0)"
+                "id": "{{ extensionBundleID }}",
+                "version": "{{ extensionBundleVersion }}"
+            }
+        }
+        """
+        
+        static let hostJsonExtensionsHttpWorker = """
+        {
+            "version": "2.0",
+            "extensionBundle": {
+                "id": "{{ extensionBundleID }}",
+                "version": "{{ extensionBundleVersion }}"
+            },
+            "httpWorker": {
+                "description": {
+                    "defaultExecutablePath": "{{ execPath }}",
+                     "arguments": [ "run" ]
+                }
             }
         }
         """
@@ -56,6 +75,15 @@ internal struct Templates {
             }
         }
         """
+        
+        static let localSettingsJsonHttp = """
+       {
+           "IsEncrypted": false,
+           "Values": {
+               {{ envVars }}
+           }
+       }
+       """
         
     }
 }

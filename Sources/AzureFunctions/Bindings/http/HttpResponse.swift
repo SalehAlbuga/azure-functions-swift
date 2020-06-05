@@ -1,3 +1,10 @@
+//
+//  HttpResponse.swift
+//  SwiftFunc
+//
+//  Created by Saleh on 9/21/19.
+//
+
 import Foundation
 
 public final class HttpResponse: Binding {
