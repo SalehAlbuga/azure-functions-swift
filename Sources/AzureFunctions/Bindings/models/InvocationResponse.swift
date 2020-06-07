@@ -11,12 +11,14 @@ import Vapor
 
 public struct InvocationResponse: Content {
     
-    var Outputs: [String:AnyCodable]?
-    var Logs: [String] = []
-    var ReturnValue: AnyCodable?
+    /// Output bindings values dictionary
+    var outputs: [String:AnyCodable]?
+    /// Functions logs array. These will be logged when the Function is executed
+    var logs: [String] = []
+    /// The $return binding value
+    var returnValue: AnyCodable?
     
     enum CodingKeys: String, CodingKey {
-         
         case Output = "Outputs"
         case Logs = "Logs"
         case ReturnValue = "ReturnValue"
@@ -24,23 +26,23 @@ public struct InvocationResponse: Content {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        Outputs = try container.decode([String:AnyCodable].self, forKey: .Output)
-        Logs = try container.decode([String].self, forKey: .Logs)
-        ReturnValue = try container.decode(AnyCodable.self, forKey: .ReturnValue)
+        outputs = try container.decode([String:AnyCodable].self, forKey: .Output)
+        logs = try container.decode([String].self, forKey: .Logs)
+        returnValue = try container.decode(AnyCodable.self, forKey: .ReturnValue)
     }
     
     public init() { }
     
     public init(outputs: [String:AnyCodable], logs: [String] = [], returnValue: AnyCodable? = nil) {
-        self.Outputs = outputs
-        Logs = logs
-        ReturnValue = returnValue
+        self.outputs = outputs
+        self.logs = logs
+        self.returnValue = returnValue
     }
     
     public init(logs: [String] = [], returnValue: AnyCodable? = nil) {
-        self.Outputs = nil
-        Logs = logs
-        ReturnValue = returnValue
+        self.outputs = nil
+        self.logs = logs
+        self.returnValue = returnValue
     }
     
     public static func response(with outputs: [String:AnyCodable], logs: [String] = [], returnValue: AnyCodable? = nil) -> Data {
@@ -50,9 +52,9 @@ public struct InvocationResponse: Content {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(Outputs, forKey: .Output)
-        try container.encode(Logs, forKey: .Logs)
-        try container.encode(ReturnValue, forKey: .ReturnValue)
+        try container.encode(outputs, forKey: .Output)
+        try container.encode(logs, forKey: .Logs)
+        try container.encode(returnValue, forKey: .ReturnValue)
     }
     
 }
@@ -60,11 +62,11 @@ public struct InvocationResponse: Content {
 public extension InvocationResponse {
     
     mutating func appendLog(_ log: String) {
-        Logs.append(log)
+        logs.append(log)
     }
     
     mutating func removeLastLog() {
-        Logs.removeLast()
+        logs.removeLast()
     }
     
 }

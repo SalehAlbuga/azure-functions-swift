@@ -13,10 +13,14 @@ public final class FunctionRegistry {
     private var functionsById: [String: Function] = [:]
     private var functionsInfo: [String: FunctionInfo] = [:]
     
+    /// Default Azure Function storage
     public var AzureWebJobsStorage: String?
+    /// Environment variables dictionary
     public var EnvironmentVariables: [String: String]?
     
+    /// Extensions Bundle id (do not change unless needed, defaults to Microsoft.Azure.Functions.ExtensionBundle)
     public var ExtensionBundleId: String?
+    /// Extensions Bundle version (do not change unless needed, defaults to [1.*, 2.0.0))
     public var ExtensionBundleVersion: String?
     
     public init() { }
@@ -30,6 +34,7 @@ public final class FunctionRegistry {
         self.EnvironmentVariables = EnvironmentVariables
     }
     
+    /// Registers a Function
     public func register(_ function: Function.Type) {
         let fun = function.init()
         self.functionsByName[fun.name] = fun

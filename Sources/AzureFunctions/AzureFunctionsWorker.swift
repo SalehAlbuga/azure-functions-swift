@@ -18,6 +18,12 @@ public final class AzureFunctionsWorker {
     
     internal var worker: WorkerChannel!
     
+    /// Starts the worker
+    /// given element.
+    ///
+    /// - Parameter registery: The functions registery
+    /// - Parameter mode: Worker mode, can be set to .HTTP (for Azure Functions Custom Handler, HTTP worker mode) or .Classic. Defaults to .Classic
+    ///
     public func main(registry: FunctionRegistry, mode: WorkerMode = .Classic) {
         
         #if !os(Linux)
