@@ -16,7 +16,7 @@ public class ServiceBusMessage: Binding {
     public var connection: String = ""
     public var message: Any?
     
-   internal init() {
+    internal init() {
         
     }
     
@@ -42,15 +42,15 @@ public class ServiceBusMessage: Binding {
 
 extension ServiceBusMessage: BindingCapability {
     
-   var isInput: Bool {
+    var isInput: Bool {
         return false
     }
     
-   var isOutput: Bool {
+    var isOutput: Bool {
         return true
     }
     
-   var isTrigger: Bool {
+    var isTrigger: Bool {
         return true
     }
     
@@ -94,7 +94,7 @@ extension ServiceBusMessage: BindingCapability {
     }
     
     func stringJsonDescription(direction: BindingDirection) throws -> String {
-           return  try jsonDescription(direction: direction).toJsonString()
-      }
+        return  try jsonDescription(direction: direction).toJsonString()
+    }
     
 }

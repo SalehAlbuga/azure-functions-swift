@@ -27,27 +27,26 @@ import NIOHTTP1
 import SwiftProtobuf
 
 
-/// Usage: instantiate AzureFunctionsRpcMessages_FunctionRpcServiceClient, then call methods of this protocol to make API calls.
-internal protocol AzureFunctionsRpcMessages_FunctionRpcService {
+/// Usage: instantiate AzureFunctionsRpcMessages_FunctionRpcClient, then call methods of this protocol to make API calls.
+internal protocol AzureFunctionsRpcMessages_FunctionRpcClientProtocol {
   func eventStream(callOptions: CallOptions?, handler: @escaping (AzureFunctionsRpcMessages_StreamingMessage) -> Void) -> BidirectionalStreamingCall<AzureFunctionsRpcMessages_StreamingMessage, AzureFunctionsRpcMessages_StreamingMessage>
 }
 
-internal final class AzureFunctionsRpcMessages_FunctionRpcServiceClient: GRPCServiceClient, AzureFunctionsRpcMessages_FunctionRpcService {
-  internal let connection: ClientConnection
-  internal var serviceName: String { return "AzureFunctionsRpcMessages.FunctionRpc" }
+internal final class AzureFunctionsRpcMessages_FunctionRpcClient: GRPCClient, AzureFunctionsRpcMessages_FunctionRpcClientProtocol {
+  internal let channel: GRPCChannel
   internal var defaultCallOptions: CallOptions
 
   /// Creates a client for the AzureFunctionsRpcMessages.FunctionRpc service.
   ///
   /// - Parameters:
-  ///   - connection: `ClientConnection` to the service host.
+  ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  internal init(connection: ClientConnection, defaultCallOptions: CallOptions = CallOptions()) {
-    self.connection = connection
+  internal init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+    self.channel = channel
     self.defaultCallOptions = defaultCallOptions
   }
 
-  /// Asynchronous bidirectional-streaming call to EventStream.
+  /// Bidirectional streaming call to EventStream
   ///
   /// Callers should use the `send` method on the returned object to send messages
   /// to the server. The caller should send an `.end` after the final message has been sent.
@@ -57,7 +56,7 @@ internal final class AzureFunctionsRpcMessages_FunctionRpcServiceClient: GRPCSer
   ///   - handler: A closure called when each response is received from the server.
   /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
   internal func eventStream(callOptions: CallOptions? = nil, handler: @escaping (AzureFunctionsRpcMessages_StreamingMessage) -> Void) -> BidirectionalStreamingCall<AzureFunctionsRpcMessages_StreamingMessage, AzureFunctionsRpcMessages_StreamingMessage> {
-    return self.makeBidirectionalStreamingCall(path: self.path(forMethod: "EventStream"),
+    return self.makeBidirectionalStreamingCall(path: "/AzureFunctionsRpcMessages.FunctionRpc/EventStream",
                                                callOptions: callOptions ?? self.defaultCallOptions,
                                                handler: handler)
   }
@@ -85,4 +84,8 @@ extension AzureFunctionsRpcMessages_FunctionRpcProvider {
     }
   }
 }
+
+
+// Provides conformance to `GRPCPayload` for request and response messages
+extension AzureFunctionsRpcMessages_StreamingMessage: GRPCProtobufPayload {}
 

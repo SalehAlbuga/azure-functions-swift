@@ -12,7 +12,7 @@ import Stencil
 
 internal struct CodeGen {
     
-    static func exportScriptRoot(registry: FunctionRegistry,sourceDir: String, rootDir: String, debug: Bool) throws {
+    static func exportScriptRoot(registry: FunctionRegistry,sourceDir: String, rootDir: String, debug: Bool, mode: WorkerMode) throws {
         
         guard let srcFolder = try? Folder.init(path: sourceDir), srcFolder.containsFile(at: "Package.swift"), let projectName = try? Folder.init(path: "\(sourceDir)/Sources").subfolders.first?.name else {
             print("Not a Swift Project")
@@ -25,16 +25,20 @@ internal struct CodeGen {
         
         
         let hostRes: String
-        if debug {
-            hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJsonDebug, context: nil)
+        
+        var extensionsInfo = ["extensionBundleID": registry.ExtensionBundleId ?? Templates.ProjectFiles.defaultExtensionsBundleId, "extensionBundleVersion": registry.ExtensionBundleVersion ?? Templates.ProjectFiles.defaultExtensionsVersion]
+        if mode == .Classic {
+            hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJsonExtensions, context: extensionsInfo)
         } else {
-            hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJson, context: nil)
+            extensionsInfo["execPath"] = "\(rootFolder.path)functions"
+            hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJsonExtensionsHttpWorker, context: extensionsInfo)
         }
         let hostFile = try rootFolder.createFile(named: "host.json")
         try hostFile.write(hostRes)
     
         
         let localSetRes: String
+        let settingsJsontemplate = mode == .HTTP ? Templates.ProjectFiles.localSettingsJsonHttp : Templates.ProjectFiles.localSettingsJson
         if var envVars = registry.EnvironmentVariables, envVars.count > 0 {
             if let storage = registry.AzureWebJobsStorage {
                 envVars["AzureWebJobsStorage"] = storage
@@ -45,24 +49,29 @@ internal struct CodeGen {
                 envVarsString.append("\"\(setting.key)\": \"\(setting.value)\",")
             }
             
-            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": envVarsString])
+            localSetRes = try environment.renderTemplate(string: settingsJsontemplate, context: ["envVars": envVarsString])
             
         } else if let storage = registry.AzureWebJobsStorage {
-            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: ["envVars": "\"AzureWebJobsStorage\": \"\(storage)\""])
+            localSetRes = try environment.renderTemplate(string: settingsJsontemplate, context: ["envVars": "\"AzureWebJobsStorage\": \"\(storage)\""])
         } else {
-            localSetRes = try environment.renderTemplate(string: Templates.ProjectFiles.localSettingsJson, context: nil)
+            localSetRes = try environment.renderTemplate(string: settingsJsontemplate, context: nil)
         }
        
         let localSetFile = try rootFolder.createFile(named: "local.settings.json")
         try localSetFile.write(localSetRes)
         
-        let workersFolder = try rootFolder.createSubfolderIfNeeded(withName: "workers")
-        let swiftFolder = try workersFolder.createSubfolderIfNeeded(withName: "swift")
-        let workerRes = try environment.renderTemplate(string: Templates.ProjectFiles.workerConfigJson, context: ["execPath": "\(swiftFolder.path)functions"])
-        let workerFile = try swiftFolder.createFile(named: "worker.config.json")
-        try workerFile.write(workerRes)
+        let execDestination: Folder
+        if mode == .Classic {
+            let workersFolder = try rootFolder.createSubfolderIfNeeded(withName: "workers")
+            execDestination = try workersFolder.createSubfolderIfNeeded(withName: "swift")
+            let workerRes = try environment.renderTemplate(string: Templates.ProjectFiles.workerConfigJson, context: ["execPath": "\(execDestination.path)functions"])
+            let workerFile = try execDestination.createFile(named: "worker.config.json")
+            try workerFile.write(workerRes)
+        } else {
+            execDestination = rootFolder
+        }
         
-        try File.init(path: "\(sourceDir)/.build/release/functions").copy(to: swiftFolder)
+        try File.init(path: "\(sourceDir)/.build/release/functions").copy(to: execDestination)
         
         
         for file in try Folder(path: "\(sourceDir)/Sources/\(projectName)/functions").files {
@@ -83,8 +92,10 @@ internal struct CodeGen {
                 } else {
                     print("Function \(name) is not registered.")
                     if !debug {
-                        print("Make sure to register \(name) or remove it")
+                        print("Error: \(name) exists but is not registered, which is not supported in production. Make sure to register \(name) or remove it")
                         exit(1)
+                    } else {
+                        print("Warning: \(name) exists but is not registered. This is only allowed while debugging (running locally)")
                     }
                 }
             } catch {

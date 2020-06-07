@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import AnyCodable
+import Vapor
 
 enum FunctionError: Error {
     case FunctionTypeNotImplementedException(String)
@@ -17,6 +19,7 @@ public typealias callback = (Any) -> Void
 
 open class Function {
     
+    /// Function name, has to match class and file names.
     public var name: String!
     
     public var id: String!
@@ -24,43 +27,60 @@ open class Function {
     internal var inputBindingsDic: [String: Binding] = [:]
     internal var outputBindingsDic: [String: Binding] = [:]
     
+    /// Function input bindings (Classic and HTTP modes)
     public var inputBindings: [Binding] = []
+    /// Function output bindings (Classic and HTTP modes)
     public var outputBindings: [Binding] = []
     public var isDisabled: Bool = false
     
+    /// Function trigger (Classic and HTTP modes)
     public var trigger: Binding!
+    
+    /// function.json bindings dictionary (HTTP Worker mode only)
+    public var functionJsonBindings: [[String: Any]] = []
+    /// Vapor app, to add the function route (HTTP Worker mode only)
+    public var app: Application = HandlerHTTPServer.shared.app
+    
     
     public required init() {
         
     }
     
+    /// Function handler for HTTP trigger (Classic mode only)
     open func exec(request: HttpRequest, context: inout Context, callback: @escaping callback) throws {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
+    /// Function handler for Timer trigger (Classic mode only)
     open func exec(timer: TimerTrigger, context: inout Context, callback: @escaping callback) throws {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
+    /// Function handler for various triggers that has values of type Data (Classic mode only)
     open func exec(data: Data, context: inout Context, callback: @escaping callback) throws {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
+    /// Function handler for various triggers that has values of type String (Classic mode only)
     open func exec(string: String, context: inout Context, callback: @escaping callback) throws {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
+    /// Function handler for various triggers that has values of type Dictionary (Classic mode only)
     open func exec(dictionary: [String: Any], context: inout Context, callback: @escaping callback) throws {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
+    /// Function handler for Blob trigger (Classic mode only)
     open func exec(blob: Blob, context: inout Context, callback: @escaping callback) throws {
         throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
+    /// Function handler for ServiceBus trigger (Classic mode only)
     open func exec(sbMessage: ServiceBusMessage, context: inout Context, callback: @escaping callback) throws {
            throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
-       }
+    }
+    
     
 }
 
@@ -72,24 +92,31 @@ internal extension Function {
         }
     }
     
-    func validationBindings() {
-        for binding in inputBindings {
-            
-            if (binding as! BindingCapability).isInput == false {
-                fatalError("\(binding.self) of Function \(self.name!) is not an input binding")
-            }
-        }
+    func validateBindings() {
         
-        for binding in outputBindings {
-            if (binding as! BindingCapability).isOutput == false {
-                fatalError("\(binding.self) of Function \(self.name!) is not an output binding")
+        if functionJsonBindings.count > 0 {
+            return
+        } else if functionJsonBindings.count == 0 && inputBindings.count == 0 && outputBindings.count == 0 && trigger == nil {
+            fatalError("No bindings or trigger defined. Please set functionJsonBindings or trigger and other binding properties")
+        } else {
+            
+            for binding in inputBindings {
+                if (binding as! BindingCapability).isInput == false {
+                    fatalError("\(binding.self) of Function \(self.name!) is not an input binding")
+                }
             }
             
-            //            precondition((binding as! BindingCapability).isOutput == true, "\(Logger.LogPrefix) \(binding.self) is not an output binding")
+            for binding in outputBindings {
+                if (binding as! BindingCapability).isOutput == false {
+                    fatalError("\(binding.self) of Function \(self.name!) is not an output binding")
+                }
+                
+                //            precondition((binding as! BindingCapability).isOutput == true, "\(Logger.LogPrefix) \(binding.self) is not an output binding")
+            }
+            
+            //        precondition((trigger as! BindingCapability).isTrigger == true, "\(Logger.LogPrefix) \(String(describing: trigger.self)) is not a trigger")
+            if (trigger as! BindingCapability).isTrigger == false { fatalError("\(String(describing: trigger.self)) of Function \(self.name!) is not a trigger") }
         }
-        
-        //        precondition((trigger as! BindingCapability).isTrigger == true, "\(Logger.LogPrefix) \(String(describing: trigger.self)) is not a trigger")
-        if (trigger as! BindingCapability).isTrigger == false { fatalError("\(String(describing: trigger.self)) of Function \(self.name!) is not a trigger") }
     }
     
 }
@@ -101,7 +128,15 @@ internal extension Function {
         
         var bindings: [[String:Any]] = []
         
-        bindings.append(try (trigger as! BindingCapability).jsonDescription(direction: .trigger))
+        if functionJsonBindings.count > 0 {
+            for binding in functionJsonBindings {
+                bindings.append(binding)
+            }
+        }
+        
+        if trigger != nil {
+            bindings.append(try (trigger as! BindingCapability).jsonDescription(direction: .trigger))
+        }
         
         for binding in inputBindings {
             bindings.append(try (binding as! BindingCapability).jsonDescription(direction: .input))
