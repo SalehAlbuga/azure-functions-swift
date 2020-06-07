@@ -25,11 +25,6 @@ internal struct CodeGen {
         
         
         let hostRes: String
-//        if debug {
-//            hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJsonDebug, context: nil)
-//        } else {
-//            hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJson, context: nil)
-//        }
         
         var extensionsInfo = ["extensionBundleID": registry.ExtensionBundleId ?? Templates.ProjectFiles.defaultExtensionsBundleId, "extensionBundleVersion": registry.ExtensionBundleVersion ?? Templates.ProjectFiles.defaultExtensionsVersion]
         if mode == .Classic {
@@ -97,8 +92,10 @@ internal struct CodeGen {
                 } else {
                     print("Function \(name) is not registered.")
                     if !debug {
-                        print("Make sure to register \(name) or remove it")
+                        print("Error: \(name) exists but is not registered, which is not supported in production. Make sure to register \(name) or remove it")
                         exit(1)
+                    } else {
+                        print("Warning: \(name) exists but is not registered. This is only allowed while debugging (running locally)")
                     }
                 }
             } catch {
