@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.4.0"),
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.8.0"),
         .package(url: "https://github.com/Flight-School/AnyCodable",   from: "0.2.3"),
         .package(url: "https://github.com/grpc/grpc-swift", .exact("1.0.0-alpha.12")),
         .package(url: "https://github.com/JohnSundell/Files", from: "4.1.1"),
