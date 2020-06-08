@@ -13,6 +13,8 @@ in [Swift](https://swift.org).
 >
 > _Microsoft and Azure are registered trademarks of Microsoft Corporation._
 
+##### Version 0.6.0 docs that implement Custom Handlers are in the works!
+
 #### Documentation [home page](https://swiftfunc.developerhub.io/) 
 
 ## Example
