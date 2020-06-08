@@ -78,7 +78,7 @@ open class Function {
     
     /// Function handler for ServiceBus trigger (Classic mode only)
     open func exec(sbMessage: ServiceBusMessage, context: inout Context, callback: @escaping callback) throws {
-           throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
+        throw FunctionError.FunctionTypeNotImplementedException("Please override the right exec function for your trigger")
     }
     
     
@@ -94,7 +94,7 @@ internal extension Function {
     
     func validateBindings() {
         
-        if functionJsonBindings.count > 0 {
+        if functionJsonBindings.count > 0 && inputBindings.count == 0 && outputBindings.count == 0 && trigger == nil {
             return
         } else if functionJsonBindings.count == 0 && inputBindings.count == 0 && outputBindings.count == 0 && trigger == nil {
             fatalError("No bindings or trigger defined. Please set functionJsonBindings or trigger and other binding properties")
@@ -115,7 +115,9 @@ internal extension Function {
             }
             
             //        precondition((trigger as! BindingCapability).isTrigger == true, "\(Logger.LogPrefix) \(String(describing: trigger.self)) is not a trigger")
-            if (trigger as! BindingCapability).isTrigger == false { fatalError("\(String(describing: trigger.self)) of Function \(self.name!) is not a trigger") }
+            if trigger != nil {
+                if (trigger as! BindingCapability).isTrigger == false { fatalError("\(String(describing: trigger.self)) of Function \(self.name!) is not a trigger") }
+            }
         }
     }
     
