@@ -1,11 +1,11 @@
 # Azure Functions for Swift ⚡️
 
 [![ver](https://img.shields.io/github/v/release/salehalbuga/azure-functions-swift?include_prereleases&label=version)](https://swiftfunc.developerhub.io)
-[![cliver](https://img.shields.io/github/v/release/salehalbuga/azure-functions-swift-tools?include_prereleases&label=CLI+version)](https://swiftfunc.developerhub.io)
+[![cliver](https://img.shields.io/github/v/release/salehalbuga/azure-functions-swift-tools?include_prereleases&label=CLI+version)](https://github.com/SalehAlbuga/azure-functions-swift-tools)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
-[![docs-status](https://img.shields.io/badge/read_the-docs-2196f3.svg)](https://docs.rs/azure-functions)
+[![docs-status](https://img.shields.io/badge/read_the-docs-2196f3.svg)](https://swiftfunc.developerhub.io)
 [![Swift version](https://img.shields.io/badge/swift-5.2-brightgreen.svg)](https://swift.org)
-[![Chat](https://img.shields.io/discord/713477339463418016?label=Az%20Functions%20Chat)](http://discord.gg/6rDzSuM)
+[![Chat](https://img.shields.io/discord/713477339463418016?label=Join%20Az%20Functions%20Chat)](http://discord.gg/6rDzSuM)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
