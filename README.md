@@ -386,5 +386,3 @@ When your Function is done executing the logic you should call the provided call
 ```swift
 callback(res)
 ```
-
->The framework is still in an early stage, was tested in the basic supported bindings. Many improvements will be made.
