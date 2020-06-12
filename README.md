@@ -21,6 +21,10 @@ in [Swift](https://swift.org).
 
 #### Documentation [home page](https://swiftfunc.developerhub.io/) 
 
+Deploy a sample to Azure!
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fc937140075effe782996f12961b3f46d%2Fraw%2Fd94eb814fbb2250908e242aafea650576d620833%2Fswiftfunc-sample-arm.json)
+
 ## Examples
 
 A Timer Function (Custom Handler):
