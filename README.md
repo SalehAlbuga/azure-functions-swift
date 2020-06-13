@@ -14,10 +14,7 @@ in [Swift](https://swift.org).
 
 #### This framework supports the new Azure Functions [Custom Handlers](https://docs.microsoft.com/en-us/azure/azure-functions/functions-custom-handlers) (starting from 0.6.0) in addition to the traditional custom worker. 
 
-> **Disclaimer**  
-> This project is not an official Azure project.
->
-> _Microsoft and Azure are registered trademarks of Microsoft Corporation._
+> _Disclaimer: This is a community open source project, not an official Azure project_
 
 #### Documentation [home page](https://swiftfunc.developerhub.io/) 
 
