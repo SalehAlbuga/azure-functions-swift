@@ -274,7 +274,7 @@ context.outputBindings["myQueueOutput"] = "new item!"
 
 ### Custom Handler (HTTP Worker)
 
-The framework uses Vapor HTTP server. The `Function` class has the `app` property, thats the Vapor app instance you can use to register your functions's HTTP route.
+The framework uses Vapor 4.0 HTTP server. The `Function` class has the `app` property, thats the Vapor app instance you can use to register your functions's HTTP route.
 
 ```swift
 class myFunction: Function {
