@@ -5,8 +5,9 @@
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![docs-status](https://img.shields.io/badge/read_the-docs-2196f3.svg)](https://swiftfunc.developerhub.io)
 [![Swift version](https://img.shields.io/badge/swift-5.2-brightgreen.svg)](https://swift.org)
-[![Chat](https://img.shields.io/discord/713477339463418016?label=Join%20Az%20Functions%20Chat)](http://discord.gg/6rDzSuM)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+[![Chat](https://img.shields.io/discord/713477339463418016?label=Join%20Azure%20Functions%20Chat)](http://discord.gg/6rDzSuM)
 
 
 Write [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
@@ -18,7 +19,7 @@ in [Swift](https://swift.org).
 
 #### Documentation [home page](https://swiftfunc.developerhub.io/) 
 
-Deploy a sample to Azure!
+Deploy a sample project to Azure!
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fc937140075effe782996f12961b3f46d%2Fraw%2Fd94eb814fbb2250908e242aafea650576d620833%2Fswiftfunc-sample-arm.json)
 
@@ -91,23 +92,23 @@ class HttpFunction: Function {
 
 ## Getting Started
 
-## Installation and Requirements
+### Installation and Requirements
 
-### **macOS 10.15 or later**
+#### **macOS 10.15 or later**
 
 Currently the Swift Functions Tools are only supported on macOS. *(although, you can develop Swift Azure Functions on Linux but currently, running them locally requires a lot of manual work).*
 
-### **Swift 5.2/Xcode 11 or later**
+#### **Swift 5.2/Xcode 11 or later**
 
-### **.NET Core SDK** (optional)
+#### **.NET Core SDK** (optional)
 
 You can download .Net Core SDK from [here](https://dotnet.microsoft.com/download/dotnet-core/2.2)
 
-### **Azure Functions Core Tools**
+#### **Azure Functions Core Tools**
 
 Install the latest [Azure Functions Core Tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools).
 
-### **Swift Functions Tools**
+#### **Swift Functions Tools**
 
 Just like Core Tools, Swift Functions Tools make Swift functions development easier and much more convenient.
 
@@ -118,8 +119,7 @@ brew install salehalbuga/formulae/swift-func
 
 It installs a CLI tool called `swiftfunc` that can be used to create projects, functions and run them locally.
 
-## Developing Azure Functions in Swift
-## Creating a new Project/Azure Functions app
+### Creating a new Project/Azure Functions app
 
 Run the init command to create a new Azure Functions application:
 
@@ -132,7 +132,7 @@ The project created is a Swift package project with the Azure Functions framewor
 
 Pass `-hw` or `--http-worker` option to create the project with the  [Custom Handler](https://docs.microsoft.com/en-us/azure/azure-functions/functions-custom-handlers) template.
 
-## Creating a simple HTTP function
+### Creating a simple HTTP function
 
 Inside the new directory of your project, run the following to create a new HTTP Function named `hello`:
 
@@ -145,10 +145,10 @@ The new function file will be created in the following path `Sources/myApp/funct
 Similar to the `init` command, pass `-hw` or `--http-worker` option to create the new function with the Custom Handler template.
 
 
-## Running the new Functions App
+### Running the new Functions App
 Run `swiftfunc run` in the project directory to run your Swift Functions project locally. It will compile the code and start the host for you *(as if you were running `func host start`)*. The host output should show you the URL of `hello` function created above. Click on it to run the function and see output!
 
-## **Deploying to Azure**
+## **Deploying to Azure ☁️** 
 
 Curently Swift Functions Tools do not provide a command to deploy to Azure. To deploy the Function App to Azure, you need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
 
@@ -168,8 +168,14 @@ In [Azure portal](https://portal.azure.com), create a new Function App with **Do
 
 Once the app is created or in any existing Container Function App, under **Platform Features**, select **Container settings** and set the registry and select image you pushed.
 
+You can use the button below to deploy prebuilt sample project to your Azure subscription
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fc937140075effe782996f12961b3f46d%2Fraw%2Fd94eb814fbb2250908e242aafea650576d620833%2Fswiftfunc-sample-arm.json)
+
 ## **Bindings**
 Azure Functions offer a variety of [Bindings and Triggers](https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings)
+
+The trigger, input bindings and output bindings of a Function are set in its initializer. Azure Functions in Swift must inherit the **Function** class from the framework.
 
 ### Custom Handler (HTTP Worker)
 
@@ -192,9 +198,6 @@ Currently the following are supported by this mode. More bindings will be implem
 | Blob     | Blob Trigger                        | in      | 
 | ServiceBusMessage | Service Bus Output Message          | out            | 
 | ServiceBusMessage | Service Bus Trigger                 | in             | 
-
-
-The trigger, inputs and output of a Function are set in its constructor. Azure Functions in Swift must inherit the **Function** class from the framework.
 
 ### Custom Handler (HTTP Worker)
 
