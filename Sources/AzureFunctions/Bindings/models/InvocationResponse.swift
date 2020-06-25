@@ -12,11 +12,11 @@ import Vapor
 public struct InvocationResponse: Content {
     
     /// Output bindings values dictionary
-    var outputs: [String:AnyCodable]?
+    public var outputs: [String:AnyCodable]?
     /// Functions logs array. These will be logged when the Function is executed
-    var logs: [String] = []
+    public var logs: [String] = []
     /// The $return binding value
-    var returnValue: AnyCodable?
+    public var returnValue: AnyCodable?
     
     enum CodingKeys: String, CodingKey {
         case Output = "Outputs"
