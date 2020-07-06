@@ -3,7 +3,7 @@
 [![ver](https://img.shields.io/github/v/release/salehalbuga/azure-functions-swift?include_prereleases&label=version)](https://swiftfunc.developerhub.io)
 [![cliver](https://img.shields.io/github/v/release/salehalbuga/azure-functions-swift-tools?include_prereleases&label=CLI+version)](https://github.com/SalehAlbuga/azure-functions-swift-tools)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
-[![docs-status](https://img.shields.io/badge/read_the-docs-2196f3.svg)](https://swiftfunc.developerhub.io)
+[![docs-status](https://img.shields.io/badge/read_the-docs-2196f3.svg)](https://docs.swiftfunc.dev/)
 [![Swift version](https://img.shields.io/badge/swift-5.2-brightgreen.svg)](https://swift.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -17,7 +17,7 @@ in [Swift](https://swift.org).
 
 > _Disclaimer: This is a community open source project, not an official Azure project_
 
-#### Documentation [home page](https://swiftfunc.developerhub.io/) 
+#### Documentation [home page](https://docs.swiftfunc.dev/) 
 
 Deploy a sample project to Azure!
 
