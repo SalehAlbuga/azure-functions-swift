@@ -21,7 +21,14 @@ in [Swift](https://swift.org).
 
 Deploy a sample project to Azure!
 
+Classic worker sample:
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](http://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fb0d9eeaae04cc07faf95f11b01143e40%2Fraw%2Ff70a0896960d5d6d04ce3bcd5de06a3fed2d8c0b%2Fswiftfunc-classic-sample-arm.json)
+
+Custom Handler sample:
+
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fc937140075effe782996f12961b3f46d%2Fraw%2Fd94eb814fbb2250908e242aafea650576d620833%2Fswiftfunc-sample-arm.json)
+
 
 ## Examples
 
@@ -168,7 +175,11 @@ In [Azure portal](https://portal.azure.com), create a new Function App with **Do
 
 Once the app is created or in any existing Container Function App, under **Platform Features**, select **Container settings** and set the registry and select image you pushed.
 
-You can use the button below to deploy prebuilt sample project to your Azure subscription
+You can use the buttons below to deploy prebuilt sample project to your Azure subscription
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](http://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fb0d9eeaae04cc07faf95f11b01143e40%2Fraw%2Ff70a0896960d5d6d04ce3bcd5de06a3fed2d8c0b%2Fswiftfunc-classic-sample-arm.json)
+
+Custom Handler sample:
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fc937140075effe782996f12961b3f46d%2Fraw%2Fd94eb814fbb2250908e242aafea650576d620833%2Fswiftfunc-sample-arm.json)
 
