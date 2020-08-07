@@ -101,7 +101,9 @@ class HttpFunction: Function {
 
 ### Installation and Requirements
 
-#### **Swift 5.2/Xcode 11 or later**
+#### **Swift 5.2 or later or Xcode 11 or later on macOS**
+
+Swift installation: https://swift.org/getting-started/#installing-swift
 
 #### **Azure Functions Core Tools**
 
