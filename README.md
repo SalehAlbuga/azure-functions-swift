@@ -101,15 +101,7 @@ class HttpFunction: Function {
 
 ### Installation and Requirements
 
-#### **macOS 10.15 or later**
-
-Currently the Swift Functions Tools are only supported on macOS. *(although, you can develop Swift Azure Functions on Linux but currently, running them locally requires a lot of manual work).*
-
 #### **Swift 5.2/Xcode 11 or later**
-
-#### **.NET Core SDK** (optional)
-
-You can download .Net Core SDK from [here](https://dotnet.microsoft.com/download/dotnet-core/2.2)
 
 #### **Azure Functions Core Tools**
 
@@ -119,9 +111,21 @@ Install the latest [Azure Functions Core Tools](https://docs.microsoft.com/en-us
 
 Just like Core Tools, Swift Functions Tools make Swift functions development easier and much more convenient.
 
-You can install it from [Homebrew](https://brew.sh) 🍺
+On **macOS**, you can install it from [Homebrew](https://brew.sh) 🍺
 ```bash
 brew install salehalbuga/formulae/swift-func
+```
+
+on **Linux**, 
+
+Clone the repo the tools repo
+```bash
+git clone https://github.com/SalehAlbuga/azure-functions-swift-tools
+```
+
+Install
+```bash
+make install
 ```
 
 It installs a CLI tool called `swiftfunc` that can be used to create projects, functions and run them locally.
