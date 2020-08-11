@@ -17,7 +17,7 @@ in [Swift](https://swift.org).
 
 > _Disclaimer: This is a community open source project, not an official Azure project_
 
-#### Documentation [home page](https://docs.swiftfunc.dev/) 
+#### [Documentation](https://docs.swiftfunc.dev/) 
 
 Deploy a sample project to Azure!
 
@@ -192,7 +192,7 @@ Custom Handler sample:
 ## **Bindings**
 Azure Functions offer a variety of [Bindings and Triggers](https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings)
 
-The trigger, input bindings and output bindings of a Function are set in its initializer. Azure Functions in Swift must inherit the **Function** class from the framework.
+The trigger, input bindings and output bindings of a Function are set in its initializer. Azure Functions in Swift must subclass the **Function** class from the framework.
 
 ### Custom Handler (HTTP Worker)
 
@@ -352,13 +352,20 @@ To update the framework:
 swift package update
 ```
 
-To update the tools:
+To update the tools on **macOS**
 ```bash
 brew upgrade salehalbuga/formulae/swift-func
 ```
 
-### Storage Connections
+on **Linux**
+```bash
+git clone https://github.com/SalehAlbuga/azure-functions-swift-tools
+make install
+```
+
+### Storage Connections and other settings
 In the generated `main.swift` you can define your debug `AzureWebJobsStorage` and optionally any other connections/environment vars.
+Additionally, you can change the default Extension Bundle id and version.
 
 ```swift
 //
@@ -376,6 +383,10 @@ let registry = FunctionRegistry()
 
 registry.AzureWebJobsStorage = "yourConnection" //Remove before deploying. Do not commit or push any Storage Account keys
 registry.EnvironmentVariables = ["queueStorageConnection": "otherConnection"]
+
+// Optionally you can change the default ExtensionBundleId and version 
+registry.ExtensionBundleId = "Microsoft.Azure.Functions.ExtensionBundle"
+registry.ExtensionBundleVersion = "[1.*, 2.0.0)"
 
 registry.register(hello.self)
 ...
