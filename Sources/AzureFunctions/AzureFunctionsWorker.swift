@@ -10,7 +10,7 @@ import Vapor
 
 public final class AzureFunctionsWorker {
     
-    internal let version = "0.6.0"
+    internal let version = "0.6.1"
     
     public static let shared = AzureFunctionsWorker()
     
@@ -50,8 +50,13 @@ public final class AzureFunctionsWorker {
                 isDebug = true
             }
             
+            var azWorkerPath: Bool = false
+            if let _ = args.firstIndex(of: "--azure-worker-path") {
+                azWorkerPath = true
+            }
+            
             do {
-                try CodeGen.exportScriptRoot(registry: registry, sourceDir: sourcePath, rootDir: rootPath, debug: isDebug, mode: mode)
+                try CodeGen.exportScriptRoot(registry: registry, sourceDir: sourcePath, rootDir: rootPath, debug: isDebug, azureWorkerPath: azWorkerPath, mode: mode)
             } catch {
                 print("error exporting project: \(error.localizedDescription)")
                 exit(1)
