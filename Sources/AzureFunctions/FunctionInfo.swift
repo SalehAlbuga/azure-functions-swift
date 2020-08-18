@@ -39,6 +39,7 @@ internal final class FunctionInfo {
         }
     }
     
+    // Unused
     static func getInputsAndBindings(input: AzureFunctionsRpcMessages_TypedData) -> Any?  {
         return nil
     }

@@ -12,7 +12,7 @@ import Stencil
 
 internal struct CodeGen {
     
-    static func exportScriptRoot(registry: FunctionRegistry,sourceDir: String, rootDir: String, debug: Bool, mode: WorkerMode) throws {
+    static func exportScriptRoot(registry: FunctionRegistry,sourceDir: String, rootDir: String, debug: Bool, azureWorkerPath: Bool = false, mode: WorkerMode) throws {
         
         guard let srcFolder = try? Folder.init(path: sourceDir), srcFolder.containsFile(at: "Package.swift"), let projectName = try? Folder.init(path: "\(sourceDir)/Sources").subfolders.first?.name else {
             print("Not a Swift Project")
@@ -30,7 +30,7 @@ internal struct CodeGen {
         if mode == .Classic {
             hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJsonExtensions, context: extensionsInfo)
         } else {
-            extensionsInfo["execPath"] = "\(rootFolder.path)functions"
+            extensionsInfo["execPath"] = azureWorkerPath ? Templates.ProjectFiles.defaultHandlerExecutablePath : "\(rootFolder.path)functions"
             hostRes = try environment.renderTemplate(string: Templates.ProjectFiles.hostJsonExtensionsHttpWorker, context: extensionsInfo)
         }
         let hostFile = try rootFolder.createFile(named: "host.json")
@@ -64,7 +64,7 @@ internal struct CodeGen {
         if mode == .Classic {
             let workersFolder = try rootFolder.createSubfolderIfNeeded(withName: "workers")
             execDestination = try workersFolder.createSubfolderIfNeeded(withName: "swift")
-            let workerRes = try environment.renderTemplate(string: Templates.ProjectFiles.workerConfigJson, context: ["execPath": "\(execDestination.path)functions"])
+            let workerRes = try environment.renderTemplate(string: Templates.ProjectFiles.workerConfigJson, context: ["execPath": azureWorkerPath ? Templates.ProjectFiles.defaultWorkerExecutablePath : "\(execDestination.path)functions"])
             let workerFile = try execDestination.createFile(named: "worker.config.json")
             try workerFile.write(workerRes)
         } else {

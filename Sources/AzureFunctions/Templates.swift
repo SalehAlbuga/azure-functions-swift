@@ -13,6 +13,8 @@ internal struct Templates {
         
         static let defaultExtensionsBundleId = "Microsoft.Azure.Functions.ExtensionBundle"
         static let defaultExtensionsVersion = "[1.*, 2.0.0)"
+        static let defaultWorkerExecutablePath = "/home/site/wwwroot/workers/swift/functions"
+        static let defaultHandlerExecutablePath = "/home/site/wwwroot/functions"
         
         static let functionJson = """
         {{ bindings }}
