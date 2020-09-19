@@ -10,7 +10,7 @@ import Vapor
 
 public final class AzureFunctionsWorker {
     
-    internal let version = "0.6.2"
+    internal let version = "0.6.3"
     
     public static let shared = AzureFunctionsWorker()
     

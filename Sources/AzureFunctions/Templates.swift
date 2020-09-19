@@ -37,11 +37,11 @@ internal struct Templates {
                 "id": "{{ extensionBundleID }}",
                 "version": "{{ extensionBundleVersion }}"
             },
-            "httpWorker": {
+            "customHandler": {
                 "description": {
                     "defaultExecutablePath": "{{ execPath }}",
-                     "arguments": [ "run" ]
-                }
+                    "arguments": [ "run" ]
+               }
             }
         }
         """
