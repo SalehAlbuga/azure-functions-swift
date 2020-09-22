@@ -163,7 +163,7 @@ Run `swiftfunc run` in the project directory to run your Swift Functions project
 
 ## **Deploying to Azure ☁️** 
 
-There are 2 methods of deploying Swift Functions to Azure.
+There are 2 methods to deploy Swift Functions to Azure
 
 ### Container Functions
 
