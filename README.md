@@ -163,9 +163,13 @@ Run `swiftfunc run` in the project directory to run your Swift Functions project
 
 ## **Deploying to Azure ☁️** 
 
-Curently Swift Functions Tools do not provide a command to deploy to Azure. To deploy the Function App to Azure, you need to build the provided docker image, push to a registry and set it in the Container Settings of the Function App.
+There are 2 methods of deploying Swift Functions to Azure.
 
-Build the image
+### Container Functions
+
+To deploy the Function App in a Container, you can either use the Functions Core Tool `func deploy` command, where it will build the image, push it to a registry and set it in the destination Function App or you can do that manually as shown below.
+
+Build the image (Dockerfile is provided when the project is created)
 ```bash
 docker build -t <imageTag> .
 ```
@@ -188,6 +192,37 @@ You can use the buttons below to deploy prebuilt sample project to your Azure su
 Custom Handler sample:
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgist.githubusercontent.com%2FSalehAlbuga%2Fc937140075effe782996f12961b3f46d%2Fraw%2Fd94eb814fbb2250908e242aafea650576d620833%2Fswiftfunc-sample-arm.json)
+
+### Hosting on a Linux Consumption Plan
+
+First, you need to set the following App Setting in the Function App on Azure.
+`LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/site/wwwroot/workers/swift/lib/`
+
+Then depending if you're developing on a Linux machine or a Mac:
+
+#### Linux
+
+Login to your Azure account from Azure CLI
+```bash
+az login
+```
+
+When Azure CLI finishes loading your subscription(s) info, run:
+```bash
+swiftfunc publish myswiftfunctions
+```
+
+Swift Function Tools publish command is going to compile, export and publish your Swift Functions project.
+
+#### macOS
+
+Publishing to a Function App in a Linux Consumption Plan from macOS requires the app to be build in a Linux container first, to do that you can use VSCode Dev Containers.
+The project needs to be created with the `-dc` or `--dev-container` option to have the Swift Function Dev Container added (or you can create a new one and copy the .devcontainer folder to your project).
+`swiftfunc init myFunctionApp -hw -dc`
+
+Reopen the folder in dev container (Command-Shift-P, search for and select _Remote-Containers: Reopen in Container_)
+
+Once the dev container is ready, follow the same Linux steps above to publish the app! 
 
 ## **Bindings**
 Azure Functions offer a variety of [Bindings and Triggers](https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings)
